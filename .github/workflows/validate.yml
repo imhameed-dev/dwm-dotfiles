@@ -65,5 +65,5 @@ jobs:
           grep -Eq '^#define[[:space:]]+POLYBAR_HEIGHT[[:space:]]+[0-9]+$' dwm/polybar-height.h
           grep -Eq '^#define[[:space:]]+POLYBAR_TOP_GAP[[:space:]]+[0-9]+$' dwm/polybar-height.h
           grep -Eq '^#define[[:space:]]+POLYBAR_BOTTOM_GAP[[:space:]]+[0-9]+$' dwm/polybar-height.h
-          ! grep -RIn --exclude-dir=.git -E 'debian-dwm-dotfiles|/usr/X11R6|wlp2s0|BAT1|ACAD' .
+          ! grep -RIn --exclude-dir=.git --exclude-dir=.github -E 'debian-dwm-dotfiles|/usr/X11R6|wlp2s0|BAT1|ACAD' .
           ! find . -type f \( -name '*.o' -o -name 'dwm' \) -print -quit | grep -q .
