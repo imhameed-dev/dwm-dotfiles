@@ -1,0 +1,13 @@
+# DWM build outputs
+dwm/dwm
+dwm/*.o
+
+# Local installer/runtime state
+.dwm-autostart.log
+*.log
+
+# Editor/OS noise
+*.swp
+*.swo
+*~
+.DS_Store

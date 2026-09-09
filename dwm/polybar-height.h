@@ -1,0 +1,5 @@
+/* Shared external Polybar geometry. */
+#define POLYBAR_HEIGHT 34
+#define POLYBAR_TOP_GAP 8
+#define POLYBAR_BOTTOM_GAP 8
+#define POLYBAR_RESERVED_HEIGHT (POLYBAR_HEIGHT + POLYBAR_TOP_GAP + POLYBAR_BOTTOM_GAP)

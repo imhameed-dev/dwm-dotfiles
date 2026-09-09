@@ -1,0 +1,91 @@
+* {
+    bg-col:       #000000;
+    bg-col-alt:   #14161c;
+    fg-col:       #e6e6e6;
+    fg-col-dim:   #9a9a9a;
+    selected-col: #8a6a72;
+
+    font: "JetBrains Mono 11";
+}
+
+window {
+    transparency: "none";
+    background-color: @bg-col;
+    border: 1px;
+    border-color: #ffffff22;
+    border-radius: 6px;
+    width: 75%;
+    location: center;
+    anchor: center;
+    padding: 14px;
+    spacing: 12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-col-alt;
+    border-radius: 4px;
+    padding: 10px 14px;
+    spacing: 10px;
+    children: [ icon-search, entry ];
+}
+
+icon-search {
+    expand: false;
+    filename: "system-search";
+    size: 1.1em;
+    background-color: transparent;
+    vertical-align: 0.5;
+    horizontal-align: 0.5;
+}
+
+entry {
+    background-color: transparent;
+    text-color: @fg-col;
+    placeholder: "Search / Choose Wallpaper";
+    placeholder-color: @fg-col-dim;
+}
+
+listview {
+    background-color: @bg-col;
+    flow: horizontal;
+    fixed-columns: true;
+    columns: 6;
+    lines: 2;
+    spacing: 14px;
+    fixed-height: true;
+    cycle: true;
+}
+
+element {
+    orientation: vertical;
+    background-color: transparent;
+    padding: 4px;
+}
+
+element normal.normal {
+    background-color: transparent;
+}
+
+element selected.normal {
+    background-color: @selected-col;
+    text-color: @fg-col;
+    border-radius: 4px;
+}
+
+element-icon {
+    background-color: transparent;
+    size: calc((100% - 70px) / 6);
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+    border-radius: 4px;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: @fg-col;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+    padding: 6px 4px;
+    font: "JetBrains Mono 10";
+}

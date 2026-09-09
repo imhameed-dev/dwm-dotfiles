@@ -1,0 +1,100 @@
+configuration {
+    show-icons: false;
+}
+
+* {
+    background:     #14141ae6;
+    background-alt: #ffffff18;
+    foreground:     #e8e8e8;
+    highlight-bg:   #ffffff30;
+    font:           "JetBrains Mono 15";
+}
+
+window {
+    background-color: @background;
+    border:            0px;
+    border-radius:      18px;
+    width:               560px;
+    padding:             32px;
+}
+
+mainbox {
+    background-color: transparent;
+    border:              0px;
+    children:            [ message, listview, inputbar ];
+    spacing:              24px;
+}
+
+message {
+    background-color: transparent;
+    border:              0px;
+}
+
+textbox {
+    text-color:  @foreground;
+    background-color: transparent;
+    horizontal-align: 0.5;
+    font: "JetBrains Mono 22";
+}
+
+listview {
+    background-color: transparent;
+    border:              0px;
+    columns:              5;
+    lines:                 1;
+    spacing:               14px;
+    fixed-height:          true;
+    scrollbar:             false;
+}
+
+element {
+    background-color: @background-alt;
+    text-color:         @foreground;
+    orientation:        vertical;
+    border:              0px;
+    border-radius:       24px;
+    padding:              26px 8px;
+}
+
+element normal.normal {
+    background-color: @background-alt;
+    text-color:         @foreground;
+}
+
+element selected.normal {
+    background-color: @highlight-bg;
+    text-color:         @foreground;
+}
+
+element-text {
+    horizontal-align:  0.5;
+    text-color:         inherit;
+    background-color:   transparent;
+    font: "JetBrains Mono 26";
+}
+
+inputbar {
+    background-color: transparent;
+    border:             0px;
+    orientation:         horizontal;
+    children:            [ spacer-left, prompt, spacer-right ];
+}
+
+spacer-left {
+    expand: true;
+    background-color: transparent;
+}
+
+spacer-right {
+    expand: true;
+    background-color: transparent;
+}
+
+prompt {
+    expand: false;
+    text-color: #aaaaaa;
+    background-color: @background-alt;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font: "JetBrains Mono 13";
+}
