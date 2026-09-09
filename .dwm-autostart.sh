@@ -31,7 +31,7 @@ DEFAULT_WALLPAPER="$WALLPAPER_DIR/wallpaper.jpg"
 mkdir -p "$WALLPAPER_DIR"
 
 if [ -f "$LAST_WALLPAPER" ]; then
-    LAST_PATH=$(<"$LAST_WALLPAPER")
+    LAST_PATH=$(cat "$LAST_WALLPAPER")
     if [ -f "$LAST_PATH" ]; then
         feh --bg-fill "$LAST_PATH" &
     elif [ -f "$DEFAULT_WALLPAPER" ]; then
