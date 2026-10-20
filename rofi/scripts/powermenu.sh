@@ -11,7 +11,7 @@ shutdown="Shut down"
 
 selected=$(printf "%s\n%s\n%s\n%s\n%s" "$lock" "$sleep_opt" "$logout" "$restart" "$shutdown" | \
     rofi -dmenu -i -theme ~/.config/rofi/powermenu.rasi \
-    -mesg "Goodbye ghost" -p "Uptime: $uptime_str")
+    -mesg "Goodbye $USER" -p "Uptime: $uptime_str")
 
 case "$selected" in
     "$lock") i3lock ;;

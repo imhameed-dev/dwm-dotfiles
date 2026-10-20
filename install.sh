@@ -67,7 +67,7 @@ collect() {
     PAIRS+=("$SRC/.autostart.sh" "$HOME/.autostart.sh")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")
-    for d in polybar picom rofi alacritty dunst; do
+    for d in rofi alacritty dunst; do
         add_tree "$SRC/$d" "$CONF/$d"
     done
     add_tree "$SRC/wallpapers" "$HOME/Pictures/wallpapers"
@@ -104,7 +104,8 @@ verify() {
     check "dwm is not installed in /usr/local/bin" test -x /usr/local/bin/dwm
     check "installed dwm does not start ~/.autostart.sh (rebuild and reinstall dwm)" \
         grep -q '\.autostart\.sh' /usr/local/bin/dwm
-    for c in dwm startx polybar picom rofi alacritty dunst feh nm-applet pactl xprop \
+    check "dwmblocks is not installed in /usr/local/bin" test -x /usr/local/bin/dwmblocks
+    for c in dwm dwmblocks startx rofi alacritty dunst feh nm-applet pactl \
              brightnessctl i3lock notify-send thunar; do
         check "command not found: $c" command -v "$c"
     done
@@ -115,12 +116,12 @@ verify() {
 }
 
 install_packages() {
-    local -a common=(polybar picom rofi alacritty dunst feh imagemagick thunar brightnessctl i3lock)
+    local -a common=(rofi alacritty dunst feh imagemagick thunar brightnessctl i3lock)
     case $DISTRO in
         arch)
             run sudo pacman -S --needed -- "${common[@]}" \
                 base-devel pkgconf libx11 libxft libxinerama \
-                xorg-server xorg-xinit xorg-xrandr xorg-xinput xorg-xprop libinput \
+                xorg-server xorg-xinit libinput \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
                 networkmanager network-manager-applet libnotify ttf-jetbrains-mono firefox
             ;;
@@ -128,7 +129,7 @@ install_packages() {
             run sudo apt-get update
             run sudo apt-get install -y "${common[@]}" \
                 build-essential pkg-config libx11-dev libxft-dev libxinerama-dev \
-                xorg xinit x11-utils x11-xserver-utils xinput xserver-xorg-input-libinput libinput-tools \
+                xorg xinit xserver-xorg-input-libinput \
                 pipewire pipewire-audio pipewire-pulse wireplumber pulseaudio-utils \
                 network-manager network-manager-gnome libnotify-bin fonts-jetbrains-mono
             run sudo apt-get install -y firefox || run sudo apt-get install -y firefox-esr
@@ -176,6 +177,11 @@ main() {
     run make -C "$SRC/dwm" clean
     run make -C "$SRC/dwm"
     run sudo make -C "$SRC/dwm" install
+
+    log "Building and installing dwmblocks"
+    run make -C "$SRC/dwmblocks" clean
+    run make -C "$SRC/dwmblocks"
+    run sudo make -C "$SRC/dwmblocks" install
 
     log "Copying configuration"
     local i

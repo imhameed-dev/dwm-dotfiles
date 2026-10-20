@@ -12,35 +12,23 @@ startx
 
 Check `~/.xinitrc` and make sure it ends with `exec dwm`.
 
-## Polybar overlaps windows
+## Gap between the bar and windows looks wrong
 
-Polybar is intentionally floating and dwm reserves space for it: `polybargap` in `dwm/config.h` must equal Polybar's `height` + `offset-y` + the gap below it (34 + 8 + 8 = 50 by default, values in `polybar/config.ini`). Rebuild dwm after changing `polybargap` (see `docs/DWM.md`), then run `pkill -x polybar` and restart dwm (Super+Shift+R); the autostart script never restarts a running Polybar.
+`updatebarpos()` in `dwm/config.h`-adjacent `dwm/dwm.c` adds one `outergap` of space below the bar (matching the gap on the other three screen edges). Change `outergap` in `dwm/config.h` to adjust it, then rebuild dwm (see `docs/DWM.md`).
 
 ## Workspace indicator does not update
 
-The `internal/xworkspaces` module reads DWM's `_NET_CURRENT_DESKTOP` EWMH property. Verify with:
+Tags are drawn directly by dwm in its own bar — there's no separate module or property to check. If tags stop updating, it's a dwm bug, not a bar/config issue; check `dmesg`/`journalctl` for a crashed dwm process (Super+Shift+R restarts it).
 
-```bash
-xprop -root _NET_CURRENT_DESKTOP
-```
-
-dwm publishes `_NET_DESKTOP_NAMES`, `_NET_DESKTOP_VIEWPORT` and `_NET_NUMBER_OF_DESKTOPS` at startup and updates `_NET_CURRENT_DESKTOP` when the view changes; Polybar's `internal/xworkspaces` module reads them. No helper scripts are involved.
-
-## Nothing starts (no wallpaper, Polybar or tray)
+## Nothing starts (no wallpaper, dwmblocks or tray)
 
 dwm runs `~/.autostart.sh` (`autostartcmd` in `dwm/config.h`). If you rename that file, nothing is started; rename it back or change `autostartcmd` and rebuild dwm.
 
-## Battery or Wi-Fi is missing
+## Volume/battery/time not showing, or volume not updating live
 
-The battery and adapter names are set in `[module/battery]` of `polybar/config.ini` (`BAT1` and `ACAD` on this laptop). List yours with `grep . /sys/class/power_supply/*/type`. Wi-Fi needs Polybar 3.6+ (`interface-type`); on older versions set `interface = <name>` in `[module/wifi]`.
-
-## App name in the bar shows an error
-
-`polybar/appname.sh` is run with `sh` and needs `xprop`. Check that `~/.config/polybar/appname.sh` exists.
-
-## Rounded corners are square
-
-The rounded corners of Polybar and Rofi need a running compositor. Check with `pgrep -x picom`.
+- Nothing in the bar's status area: confirm `dwmblocks` is actually running (`pgrep -x dwmblocks`) and that `~/.autostart.sh` starts it.
+- Volume percentage doesn't change when you press the volume keys: the volume keybinds in `dwm/config.h` must send `pkill -RTMIN+10 dwmblocks` after changing the volume (the block only refreshes on that signal, not on a timer — see `dwmblocks/config.h`).
+- Battery block shows nothing: it reads the first `/sys/class/power_supply/BAT*` it finds and prints nothing on a machine without a battery. Check with `ls /sys/class/power_supply/`.
 
 ## Touchpad tapping
 

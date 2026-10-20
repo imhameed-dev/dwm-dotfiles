@@ -15,14 +15,14 @@ jobs:
           sudo apt-get install -y build-essential pkg-config libx11-dev libxft-dev libxinerama-dev shellcheck
       - name: Shell syntax and ShellCheck
         run: |
-          scripts="install.sh .autostart.sh .xinitrc .bash_profile polybar/appname.sh rofi/scripts/powermenu.sh rofi/scripts/wallpaper-menu.sh"
+          scripts="install.sh .autostart.sh .xinitrc .bash_profile rofi/scripts/powermenu.sh rofi/scripts/wallpaper-menu.sh"
           for f in $scripts; do bash -n "$f"; done
           shellcheck $scripts
       - name: Installer dry run
         run: |
           ./install.sh --help
           ./install.sh --dry-run
-      - name: Build DWM
+      - name: Build dwm and dwmblocks
         run: |
           make clean
           make
@@ -31,7 +31,6 @@ jobs:
         run: |
           git diff --check
           test -f wallpapers/wallpaper.jpg
-          test ! -e polybar/scripts
           ! grep -nE 'while true|sleep [0-9]' .autostart.sh .xinitrc
-          ! grep -RIn -E '/home/' .autostart.sh .xinitrc polybar picom dunst
-          ! grep -RIn -E 'python|xdotool' .autostart.sh .xinitrc install.sh polybar
+          ! grep -RIn --exclude-dir=.git --exclude-dir=.github -E '/home/[a-zA-Z0-9_-]+' .
+          ! grep -RIn -E 'python|xdotool' .autostart.sh .xinitrc install.sh

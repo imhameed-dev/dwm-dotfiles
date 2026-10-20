@@ -1,6 +1,8 @@
 # DWM build outputs
 dwm/dwm
 dwm/*.o
+dwmblocks/dwmblocks
+dwmblocks/*.o
 
 # Local installer/runtime state
 .autostart.log

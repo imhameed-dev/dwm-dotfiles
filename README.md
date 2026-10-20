@@ -32,8 +32,7 @@ startx
 
 - DWM
 - Xorg / Xinit
-- Polybar
-- Picom
+- dwmblocks
 - Rofi
 - Alacritty
 - Dunst
