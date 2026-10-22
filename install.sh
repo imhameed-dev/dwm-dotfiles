@@ -67,7 +67,8 @@ collect() {
     PAIRS+=("$SRC/.autostart.sh" "$HOME/.autostart.sh")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")
-    for d in rofi dunst; do
+    PAIRS+=("$SRC/gtk-4.0/settings.ini" "$CONF/gtk-4.0/settings.ini")
+    for d in rofi ghostty dunst; do
         add_tree "$SRC/$d" "$CONF/$d"
     done
     add_tree "$SRC/wallpapers" "$HOME/Pictures/wallpapers"
