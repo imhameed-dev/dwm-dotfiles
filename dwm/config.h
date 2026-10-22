@@ -63,7 +63,7 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* ======================= COMMANDS (programs launched by keys) ======================= */
-static const char *termcmd[] = { "alacritty", NULL };
+static const char *termcmd[] = { "ghostty", NULL };
 static const char *roficmd[] = { "rofi", "-show", "drun", NULL };
 static const char *browsercmd[] = { "/bin/sh", "-c", "command -v firefox >/dev/null && exec firefox; exec firefox-esr", NULL };
 static const char *thunarcmd[] = { "thunar", NULL };
@@ -75,7 +75,7 @@ static const Key keys[] = {
 /* modifier key function argument */
 
 /* ---------- Applications ---------- */
-{ MODKEY, XK_Return, spawn, {.v = termcmd } }, /* Super+Enter -> Alacritty */
+{ MODKEY, XK_Return, spawn, {.v = termcmd } }, /* Super+Enter -> Ghostty */
 { MODKEY, XK_space, spawn, {.v = roficmd } }, /* Super+Space -> Rofi */
 { MODKEY, XK_w, spawn, {.v = wallpapermenucmd } }, /* Super+W -> wallpaper */
 { MODKEY, XK_b, spawn, {.v = browsercmd } }, /* Super+B -> Browser */

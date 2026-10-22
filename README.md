@@ -34,7 +34,7 @@ startx
 - Xorg / Xinit
 - dwmblocks
 - Rofi
-- Alacritty
+- Ghostty
 - Dunst
 - Feh
 - NetworkManager
@@ -52,7 +52,7 @@ The installer automatically creates `~/Pictures/wallpapers` and installs the rep
 
 ## Keyboard shortcuts
 
-- **Super+Enter** - Alacritty
+- **Super+Enter** - Ghostty
 - **Super+Space** - Rofi
 - **Super+W** - wallpaper menu
 - **Super+B** - Firefox / Firefox ESR
