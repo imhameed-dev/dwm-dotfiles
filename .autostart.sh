@@ -16,3 +16,4 @@ start() { pgrep -x "$1" >/dev/null || "$@" & }
 start dwmblocks
 start dunst
 start nm-applet
+start picom -b

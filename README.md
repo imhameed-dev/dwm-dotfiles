@@ -36,6 +36,7 @@ startx
 - Rofi
 - xfce4-terminal
 - Dunst
+- Picom (rounds Rofi corners only)
 - Feh
 - NetworkManager
 - libinput touchpad configuration
