@@ -15,7 +15,7 @@ selected=$(printf "%s\n%s\n%s\n%s\n%s" "$lock" "$sleep_opt" "$logout" "$restart"
 
 case "$selected" in
     "$lock") i3lock ;;
-    "$sleep_opt") systemctl suspend ;;
+    "$sleep_opt") i3lock && systemctl suspend ;;
     "$logout") pkill -x dwm ;;
     "$restart") systemctl reboot ;;
     "$shutdown") systemctl poweroff ;;

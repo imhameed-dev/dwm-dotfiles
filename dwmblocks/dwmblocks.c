@@ -4,7 +4,7 @@
  * to dwm itself are needed. A block with interval=0 never runs on a timer;
  * it only updates when sent `kill -RTMIN+<signal> $(pgrep dwmblocks)`
  * (see dwm/config.h's volume keybinds for an example). This file is the
- * unmodified upstream dwmblocks program; all customization lives in
+ * upstream dwmblocks program with three small safety fixes; all customization lives in
  * config.h. See docs/DWM.md for how to add/edit/remove a block. */
 #include<stdlib.h>
 #include<stdio.h>
@@ -50,7 +50,7 @@ void getcmd(const Block *block, char *output)
 	if (!cmdf)
 		return;
 	int i = strlen(block->icon);
-	if(fgets(c, CMDLENGTH-i, cmdf) == NULL){
+	if(fgets(c, CMDLENGTH-i-4, cmdf) == NULL){
 		pclose(cmdf);
 		output[0] = '\0';
 		return;
@@ -114,7 +114,8 @@ int getstatus(char *str, char *last)
 	str[0] = '\0';
 	for(int i = 0; i < LENGTH(blocks); i++)
 		strcat(str, statusbar[i]);
-	str[strlen(str)-1] = '\0';
+	if (str[0])
+		str[strlen(str)-1] = '\0';
 	return strcmp(str, last);//0 if they are the same
 }
 
@@ -123,9 +124,9 @@ void setroot()
 	if (!getstatus(statusstr[0], statusstr[1]))//Only set root if text has changed.
 		return;
 	Display *d = XOpenDisplay(NULL);
-	if (d) {
-		dpy = d;
-	}
+	if (!d)
+		return;
+	dpy = d;
 	screen = DefaultScreen(dpy);
 	root = RootWindow(dpy, screen);
 	XStoreName(dpy, root, statusstr[0]);

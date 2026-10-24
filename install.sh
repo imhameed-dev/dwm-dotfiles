@@ -116,14 +116,14 @@ verify() {
 }
 
 install_packages() {
-    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock)
+    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xfce4-terminal picom)
     case $DISTRO in
         arch)
             run sudo pacman -S --needed -- "${common[@]}" \
                 base-devel pkgconf libx11 libxft libxinerama \
                 xorg-server xorg-xinit libinput \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
-                networkmanager network-manager-applet libnotify ttf-jetbrains-mono firefox xfce4-terminal picom
+                networkmanager network-manager-applet libnotify ttf-jetbrains-mono firefox
             ;;
         debian)
             run sudo apt-get update
@@ -133,7 +133,6 @@ install_packages() {
                 pipewire pipewire-audio pipewire-pulse wireplumber pulseaudio-utils \
                 network-manager network-manager-gnome libnotify-bin fonts-jetbrains-mono
             run sudo apt-get install -y firefox || run sudo apt-get install -y firefox-esr
-            run sudo apt-get install -y xfce4-terminal picom
             ;;
     esac
 }
