@@ -34,7 +34,7 @@ startx
 - Xorg / Xinit
 - dwmblocks
 - Rofi
-- Ghostty
+- xfce4-terminal
 - Dunst
 - Feh
 - NetworkManager
@@ -52,7 +52,7 @@ The installer automatically creates `~/Pictures/wallpapers` and installs the rep
 
 ## Keyboard shortcuts
 
-- **Super+Enter** - Ghostty
+- **Super+Enter** - xfce4-terminal
 - **Super+Space** - Rofi
 - **Super+W** - wallpaper menu
 - **Super+B** - Firefox / Firefox ESR

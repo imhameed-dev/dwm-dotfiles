@@ -67,8 +67,7 @@ collect() {
     PAIRS+=("$SRC/.autostart.sh" "$HOME/.autostart.sh")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")
-    PAIRS+=("$SRC/gtk-4.0/settings.ini" "$CONF/gtk-4.0/settings.ini")
-    for d in rofi ghostty dunst; do
+    for d in rofi dunst; do
         add_tree "$SRC/$d" "$CONF/$d"
     done
     add_tree "$SRC/wallpapers" "$HOME/Pictures/wallpapers"
@@ -106,7 +105,7 @@ verify() {
     check "installed dwm does not start ~/.autostart.sh (rebuild and reinstall dwm)" \
         grep -q '\.autostart\.sh' /usr/local/bin/dwm
     check "dwmblocks is not installed in /usr/local/bin" test -x /usr/local/bin/dwmblocks
-    for c in dwm dwmblocks startx rofi ghostty dunst feh nm-applet pactl \
+    for c in dwm dwmblocks startx rofi xfce4-terminal dunst feh nm-applet pactl \
              brightnessctl i3lock notify-send thunar; do
         check "command not found: $c" command -v "$c"
     done
@@ -124,7 +123,7 @@ install_packages() {
                 base-devel pkgconf libx11 libxft libxinerama \
                 xorg-server xorg-xinit libinput \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
-                networkmanager network-manager-applet libnotify ttf-jetbrains-mono firefox ghostty
+                networkmanager network-manager-applet libnotify ttf-jetbrains-mono firefox xfce4-terminal
             ;;
         debian)
             run sudo apt-get update
@@ -134,7 +133,7 @@ install_packages() {
                 pipewire pipewire-audio pipewire-pulse wireplumber pulseaudio-utils \
                 network-manager network-manager-gnome libnotify-bin fonts-jetbrains-mono
             run sudo apt-get install -y firefox || run sudo apt-get install -y firefox-esr
-            run sudo apt-get install -y ghostty || log "ghostty is not in the apt repositories; install it from ghostty.org"
+            run sudo apt-get install -y xfce4-terminal
             ;;
     esac
 }
