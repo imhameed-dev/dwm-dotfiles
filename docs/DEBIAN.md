@@ -1,12 +1,11 @@
-# Debian-family Linux
+# Debian, Ubuntu and similar
 
-The installer uses APT and Debian-family package names separately from Arch.
+The installer uses APT on Debian and Debian-based systems. It detects them from `/etc/os-release`.
 
-Supported targets include Debian, Ubuntu, Linux Mint, Pop!_OS, elementary OS, Zorin OS, Kali, and other systems whose `ID_LIKE` identifies them as Debian-family systems and whose repositories provide the required packages.
+**How well tested:** this setup was first built on Debian 13 and is now used daily on Arch Linux. Debian-based systems should work, but they are tested less. If a package name does not exist in your release, the installer stops and tells you which one.
 
-Audio uses PipeWire, `pipewire-pulse`, and WirePlumber. The desktop uses `network-manager-gnome` for the NetworkManager tray applet.
+Sound uses PipeWire and WirePlumber. Wi-Fi uses NetworkManager with a tray icon (`network-manager-gnome`).
 
-Firefox is installed automatically. On Debian-family systems the installer uses `firefox` when available and falls back to `firefox-esr`; if neither is available from the configured repositories, installation stops rather than leaving a broken browser shortcut.
+Browser: Firefox is installed (`firefox`, or `firefox-esr` if that is all your release has). If you already use Brave, Super+B opens it instead.
 
-
-The installer enables and starts the NetworkManager service when systemd is available. It never removes packages.
+The installer turns on NetworkManager and never removes packages.
