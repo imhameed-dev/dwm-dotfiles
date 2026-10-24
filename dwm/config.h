@@ -65,8 +65,8 @@ static const Layout layouts[] = {
 /* ======================= COMMANDS (programs launched by keys) ======================= */
 static const char *termcmd[] = { "xfce4-terminal", NULL };
 static const char *roficmd[] = { "rofi", "-show", "drun", NULL };
-static const char *browsercmd[] = { "/bin/sh", "-c", "command -v firefox >/dev/null && exec firefox; exec firefox-esr", NULL };
-static const char *thunarcmd[] = { "thunar", NULL };
+static const char *browsercmd[] = { "/bin/sh", "-c", "for b in brave firefox firefox-esr; do command -v $b >/dev/null && exec $b; done", NULL };
+static const char *pcmanfmcmd[] = { "pcmanfm", NULL };
 static const char *powermenucmd[] = { "/bin/sh", "-c", "bash $HOME/.config/rofi/scripts/powermenu.sh", NULL };
 static const char *autostartcmd[] = { "/bin/sh", "-c", "sh $HOME/.autostart.sh", NULL };
 static const char *wallpapermenucmd[] = { "/bin/sh", "-c", "bash $HOME/.config/rofi/scripts/wallpaper-menu.sh", NULL };
@@ -79,7 +79,7 @@ static const Key keys[] = {
 { MODKEY, XK_space, spawn, {.v = roficmd } }, /* Super+Space -> Rofi */
 { MODKEY, XK_w, spawn, {.v = wallpapermenucmd } }, /* Super+W -> wallpaper */
 { MODKEY, XK_b, spawn, {.v = browsercmd } }, /* Super+B -> Browser */
-{ MODKEY, XK_e, spawn, {.v = thunarcmd } }, /* Super+E -> Thunar */
+{ MODKEY, XK_e, spawn, {.v = pcmanfmcmd } }, /* Super+E -> PCManFM */
 { MODKEY|ShiftMask, XK_s, spawn, {.v = powermenucmd } }, /* Super+Shift+S -> Power menu */
 
 /* ---------- Volume & Media Keys ---------- */

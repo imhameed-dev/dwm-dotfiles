@@ -86,7 +86,7 @@ check() {
 }
 
 have_imagemagick() { command -v magick || command -v convert; }
-have_firefox() { command -v firefox || command -v firefox-esr; }
+have_browser() { command -v brave || command -v firefox || command -v firefox-esr; }
 
 verify() {
     local i src dest c
@@ -106,17 +106,17 @@ verify() {
         grep -q '\.autostart\.sh' /usr/local/bin/dwm
     check "dwmblocks is not installed in /usr/local/bin" test -x /usr/local/bin/dwmblocks
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
-             brightnessctl i3lock notify-send thunar; do
+             brightnessctl i3lock notify-send pcmanfm; do
         check "command not found: $c" command -v "$c"
     done
     check "ImageMagick (magick or convert) not found" have_imagemagick
-    check "Firefox (firefox or firefox-esr) not found" have_firefox
+    check "no web browser found (brave, firefox or firefox-esr)" have_browser
     printf '==> Checks: %d passed, %d failed\n' "$PASS" "$FAIL"
     ((FAIL == 0))
 }
 
 install_packages() {
-    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xfce4-terminal picom)
+    local -a common=(rofi dunst feh imagemagick pcmanfm brightnessctl i3lock xfce4-terminal picom)
     case $DISTRO in
         arch)
             run sudo pacman -S --needed -- "${common[@]}" \

@@ -1,6 +1,8 @@
-# DWM Dotfiles
+# dwm-dotfiles
 
-Fast, lightweight DWM desktop setup for Linux.
+A small, fast Linux desktop for old or low-memory computers. It uses **dwm**, a tiny window manager, instead of a big desktop like GNOME or KDE, so it runs well even on 4 GB of RAM.
+
+One command installs everything.
 
 ## Install
 
@@ -10,96 +12,71 @@ cd dwm-dotfiles
 ./install.sh
 ```
 
-The installer automatically detects your Linux distribution, installs the required packages, builds and installs the DWM source included in this repository, installs the desktop configuration, and installs the X11 touchpad configuration.
+The installer asks for your password (`sudo`) because it installs programs. It then builds dwm and copies the settings. Any file it replaces is backed up first, so nothing is lost.
 
-**You do not need to install DWM separately or manually copy the configuration files.**
+When it finishes, log out, switch to the text login screen (**Ctrl+Alt+F1**), and log in. The desktop starts by itself. If it does not, type `startx`.
 
-## Start
+## Works on
 
-```bash
-startx
-```
+- **Arch Linux** - tested.
+- **Debian, Ubuntu, Linux Mint** - the installer supports them, but they are tested less.
 
-## Supported
+## What you get
 
-- Arch Linux and Arch-based distributions
-- Debian
-- Ubuntu
-- Linux Mint
-- Other compatible Debian-based distributions
-
-## Included
-
-- DWM
-- Xorg / Xinit
-- dwmblocks
-- Rofi
-- xfce4-terminal
-- Dunst
-- Picom (rounds Rofi corners only)
-- Feh
-- NetworkManager
-- libinput touchpad configuration
-- Firefox
-- Thunar
-- Brightness control
-- Fonts
-- Required X11 utilities
-- PipeWire / WirePlumber audio
-
-## Wallpaper menu
-
-The installer automatically creates `~/Pictures/wallpapers` and installs the repository wallpaper collection there. Press **Super+W** to open the Rofi wallpaper picker. The last selected wallpaper is restored on the next DWM session.
+| Program | What it does |
+| --- | --- |
+| dwm | Arranges your windows. This is the core of the desktop. |
+| dwmblocks | The top bar: volume, battery and clock. |
+| Rofi | App launcher and menus. |
+| xfce4-terminal | The terminal (where you type commands). |
+| Dunst | Pop-up notifications. |
+| Picom | Rounds the corners of Rofi menus, and nothing else. |
+| Feh | Sets the wallpaper. |
+| Firefox | Web browser. Super+B opens Brave instead if you have it. |
+| PCManFM | File manager. |
+| NetworkManager | Wi-Fi and network, with an icon in the top bar. |
+| PipeWire | Sound. |
+| Touchpad settings | Tap to click. |
 
 ## Keyboard shortcuts
 
-- **Super+Enter** - xfce4-terminal
-- **Super+Space** - Rofi
-- **Super+W** - wallpaper menu
-- **Super+B** - Firefox / Firefox ESR
-- **Super+E** - Thunar
-- **Super+Shift+S** - power menu
-- **Super+Q** - close window
-- **Super+Shift+R** - restart DWM
+**Super** is the Windows key.
 
-## Options
+| Keys | What happens |
+| --- | --- |
+| Super + Enter | Open a terminal |
+| Super + Space | Open the app launcher |
+| Super + W | Change the wallpaper |
+| Super + B | Open the browser (Brave if installed, otherwise Firefox) |
+| Super + E | Open the file manager |
+| Super + Q | Close the window |
+| Super + 1 to 5 | Go to workspace 1 to 5 |
+| Super + Shift + 1 to 5 | Move the window to workspace 1 to 5 |
+| Super + J / K | Switch between windows |
+| Super + Shift + S | Power menu: lock, sleep, log out, reboot, shut down |
+| Super + Shift + R | Restart dwm |
 
-Preview the installation without changing your system:
+## Safe to try
 
-```bash
-./install.sh --dry-run
-```
-
-Install without prompts:
-
-```bash
-./install.sh --yes
-```
-
-Verify an existing installation without changing anything:
+You can look before you change anything:
 
 ```bash
-./install.sh --check
+./install.sh --dry-run   # show what would happen, change nothing
+./install.sh --check     # check an existing install, change nothing
+./install.sh --yes       # install without asking questions
+./install.sh --help      # show all options
 ```
 
-Show all available options:
+Running the installer twice is safe. Replaced files are saved in `~/.local/state/dwm-dotfiles/backups/`.
 
-```bash
-./install.sh --help
-```
+## More help
 
-The installer is safe to run more than once. A file that differs from the repository version is moved to `~/.local/state/dwm-dotfiles/backups/` before it is replaced, and scripts are always installed executable.
-
-## Documentation
-
-Advanced documentation is available in the `docs/` directory:
-
-- `docs/INSTALL.md` - detailed installation information
-- `docs/ARCH.md` - Arch Linux notes
-- `docs/DEBIAN.md` - Debian-family notes
-- `docs/TROUBLESHOOTING.md` - troubleshooting
+- [docs/INSTALL.md](docs/INSTALL.md) - install details
+- [docs/DWM.md](docs/DWM.md) - change keys and the top bar
+- [docs/ARCH.md](docs/ARCH.md) - notes for Arch Linux
+- [docs/DEBIAN.md](docs/DEBIAN.md) - notes for Debian and similar
+- [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) - when something goes wrong
 
 ## License
 
-This project uses the license included in the repository.
-# dwm-dotfiles
+See the [LICENSE](LICENSE) file.
