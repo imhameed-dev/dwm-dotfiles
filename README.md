@@ -61,7 +61,6 @@ The installer automatically creates `~/Pictures/wallpapers` and installs the rep
 - **Super+Shift+S** - power menu
 - **Super+Q** - close window
 - **Super+Shift+R** - restart DWM
-- **Super+Shift+Q** - quit DWM
 
 ## Options
 

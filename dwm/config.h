@@ -89,7 +89,7 @@ static const Key keys[] = {
 
 /* ---------- Brightness Control   ----------- */
 { 0, XF86XK_MonBrightnessUp, spawn, SHCMD("brightnessctl set +10%") },
-{ 0, XF86XK_MonBrightnessDown, spawn, SHCMD("brightnessctl set 10%-") },
+{ 0, XF86XK_MonBrightnessDown, spawn, SHCMD("brightnessctl --min-value=1 set 10%-") },
 
 /* ---------- Window Focus & Management ---------- */
 { MODKEY, XK_j, focusstack, {.i = +1 } },
@@ -125,7 +125,6 @@ TAGKEYS( XK_5, 4)
 /* ---------- DWM Control ---------- */
 { MODKEY|ShiftMask, XK_b, togglebar, {0} }, /* Super+Shift+B -> toggle bar */
 { MODKEY|ShiftMask, XK_r, restart, {0} }, /* Super+Shift+R -> restart DWM */
-{ MODKEY|ShiftMask, XK_q, quit, {0} }, /* Super+Shift+Q -> quit DWM */
 };
 
 /* ======================= MOUSE BUTTONS ======================= */
