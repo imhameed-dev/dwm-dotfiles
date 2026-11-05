@@ -4,7 +4,7 @@
 `dwm.c`, `drw.c`, `drw.h`, `util.c`, `util.h`, `config.h`, `config.mk`, `Makefile`, `dwm.1`, `LICENSE`.
 There is no `config.def.h`; `dwm/config.h` is the only configuration. Upstream files that the build does not use (`README`, `dwm.png`, `transient.c`) are not included.
 
-## Local changes (found by searching for the custom code; diff `dwm.c` against upstream 6.5 to confirm)
+## Local changes (diff `dwm.c` against upstream 6.5 to see them all)
 
 - Systray patch (suckless.org's official `systray` patch, adapted): docks `nm-applet`'s wifi icon in the bar. Adds the `Systray` struct, `updatesystray()`/`getsystraywidth()`/`wintosystrayicon()`/`resizebarwin()`/`systraytomon()` and related `Xembed`/`_NET_SYSTEM_TRAY_*` atom handling. Config: `showsystray`, `systrayonleft`, `systrayspacing`, `systraypinning`, `systraypinningfailfirst` in `config.h`.
 - `outergap` (in `updatebarpos`): one gap-width of space on all four sides of the tiled area, including between the bar and windows below it.

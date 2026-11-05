@@ -8,11 +8,17 @@ Run the installer as your normal user from the repository root:
 
 The installer detects the distribution, installs the core desktop packages, builds DWM from `dwm/`, installs user configuration, and installs `X11/40-libinput.conf` to `/etc/X11/xorg.conf.d/40-libinput.conf`.
 
-Use `--dry-run` to preview the actions and `--yes` to skip the confirmation prompt. The installer ends with a verification (installed files match the repo, scripts are executable, dwm is the current build, required commands exist) and prints `Checks: N passed, N failed`. Run `./install.sh --check` at any time to repeat only that verification. Running it again rebuilds dwm and replaces changed files (backed up first).
+It also:
+
+- turns on the `ufw` firewall (incoming connections blocked, outgoing allowed) and starts it at every boot;
+- creates the standard home folders with `xdg-user-dirs-update`;
+- installs the terminal's colours and font to `~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal.xml`;
+- enables and starts NetworkManager when systemd is available.
+
+Use `--dry-run` to preview the actions and `--yes` to skip the confirmation prompt. The installer ends with a verification (installed files match the repo, scripts are executable, dwm is the current build, required commands exist, the firewall is running) and prints `Checks: N passed, N failed`. Run `./install.sh --check` at any time to repeat only that verification. Running it again rebuilds dwm and replaces changed files (backed up first).
 
 Before replacing a different existing file, the installer moves it to a timestamped folder under `~/.local/state/dwm-dotfiles/backups/`.
 
 The installer does not download or clone another DWM source tree. The `dwm/` directory in this repository is authoritative.
 
-
-The installer enables and starts NetworkManager when systemd is available.
+If dwm was already running when you installed, it keeps using the old setup. Close it with `pkill -x dwm`, then run `startx`.
