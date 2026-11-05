@@ -67,6 +67,7 @@ collect() {
     PAIRS+=("$SRC/.autostart.sh" "$HOME/.autostart.sh")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")
+    PAIRS+=("$SRC/xfce4-terminal/xfce4-terminal.xml" "$CONF/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal.xml")
     for d in rofi dunst picom; do
         add_tree "$SRC/$d" "$CONF/$d"
     done
@@ -105,6 +106,8 @@ verify() {
     check "installed dwm does not start ~/.autostart.sh (rebuild and reinstall dwm)" \
         grep -q '\.autostart\.sh' /usr/local/bin/dwm
     check "dwmblocks is not installed in /usr/local/bin" test -x /usr/local/bin/dwmblocks
+    check "firewall (ufw) is not running" systemctl is-active --quiet ufw
+    check "home folders were not created (Documents)" test -d "$HOME/Documents"
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
              brightnessctl i3lock notify-send pcmanfm; do
         check "command not found: $c" command -v "$c"
@@ -116,7 +119,7 @@ verify() {
 }
 
 install_packages() {
-    local -a common=(rofi dunst feh imagemagick pcmanfm brightnessctl i3lock xfce4-terminal picom)
+    local -a common=(rofi dunst feh imagemagick pcmanfm brightnessctl i3lock xfce4-terminal picom ufw xdg-user-dirs gvfs)
     case $DISTRO in
         arch)
             run sudo pacman -S --needed -- "${common[@]}" \
@@ -173,6 +176,15 @@ main() {
     install_packages
     run sudo systemctl enable --now NetworkManager || log "could not enable NetworkManager; enable it yourself"
 
+    log "Creating the standard home folders"
+    run xdg-user-dirs-update
+
+    log "Turning on the firewall (incoming connections blocked)"
+    run sudo ufw default deny incoming
+    run sudo ufw default allow outgoing
+    run sudo ufw --force enable
+    run sudo systemctl enable --now ufw
+
     log "Building and installing dwm"
     run make -C "$SRC/dwm" clean
     run make -C "$SRC/dwm"
@@ -193,7 +205,11 @@ main() {
     if ((!DRY)); then
         verify || die "$FAIL check(s) failed, see above"
     fi
-    log "Done. Start dwm with: startx"
+    if pgrep -x dwm >/dev/null; then
+        log "Done. dwm is already running with the old setup. Close it with: pkill -x dwm, then start it again with: startx"
+    else
+        log "Done. Start dwm with: startx"
+    fi
 }
 
 main "$@"
