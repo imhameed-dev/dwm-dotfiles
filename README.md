@@ -1,96 +1,43 @@
 # dwm-dotfiles
 
-A small, fast Linux desktop for old or low-memory computers. It uses **dwm**, a tiny window manager, instead of a big desktop like GNOME or KDE, so it runs well even on 4 GB of RAM.
+A tiny, fast Linux desktop for old computers: the dwm window manager with a top bar, app launcher, notifications, Wi-Fi icon and sound. Tested on Arch Linux. Debian, Ubuntu and Mint are supported but tested less.
 
-You only need `git`. The installer does the rest.
+## Quick start
 
-## Install
+1. Install git: `sudo pacman -S git` (Arch) or `sudo apt install git` (Debian, Ubuntu).
+2. Run: `git clone https://github.com/imhameed-dev/dwm-dotfiles.git && cd dwm-dotfiles && ./install.sh`
+3. Log in on the text screen and the desktop starts by itself, or type `startx`. If dwm was already running, type `pkill -x dwm` first.
 
-```bash
-sudo pacman -S git        # Arch. On Debian, Ubuntu or Mint: sudo apt install git
-git clone https://github.com/imhameed-dev/dwm-dotfiles.git
-cd dwm-dotfiles
-./install.sh
-```
+That is all. The rest explains what happened, for the curious.
 
-The installer asks for your password (`sudo`) because it installs programs. It then builds dwm and copies the settings. Any file it replaces is backed up first, so nothing is lost.
+## What the installer does
 
-It also turns on a firewall that blocks incoming connections, creates your standard folders (Documents, Downloads, Pictures and so on), and gives the terminal its dark Gruvbox colours.
+It asks for your password once (`sudo`), then:
 
-When it finishes, log out, switch to the text login screen (**Ctrl+Alt+F1**), and log in. The desktop starts by itself. If it does not, type `startx`.
+- installs the programs: Xorg, dwm's build tools, Rofi (launcher), Dunst (notifications), Picom (rounds Rofi corners only), Feh (wallpaper), PCManFM (files), xfce4-terminal, NetworkManager (Wi-Fi), PipeWire (sound), brightnessctl, i3lock, ImageMagick, Firefox and the JetBrains Mono font;
+- builds dwm and the status bar (dwmblocks) from the source in this repo;
+- copies the settings: `~/.xinitrc`, `~/.autostart.sh`, `~/.bash_profile`, `~/.config/rofi`, `dunst` and `picom`, the wallpapers in `~/Pictures/wallpapers`, the touchpad file `/etc/X11/xorg.conf.d/40-libinput.conf`, and the terminal colours (Gruvbox Dark Hard);
+- turns on the `ufw` firewall (blocks incoming connections, allows outgoing ones) and creates your folders (Documents, Downloads and so on);
+- checks everything and prints `Checks: N passed, 0 failed`.
 
-If dwm was already running while you installed, it still uses the old setup. Close it with `pkill -x dwm`, then type `startx`.
+Files it replaces are first moved to `~/.local/state/dwm-dotfiles/backups/`. Running it again is safe. The installer itself runs once and exits.
 
-## Works on
+## How the desktop starts
 
-- **Arch Linux** - tested, including the firewall, folder and terminal steps.
-- **Debian, Ubuntu, Linux Mint** - the installer supports them, but they are tested less. The firewall, folder and terminal steps have not been tested there.
+You log in on the text screen (tty1), `.bash_profile` runs `startx`, `.xinitrc` starts dwm, and dwm runs `.autostart.sh` once. That script starts the status bar, notifications, Wi-Fi icon, Picom and the wallpaper. Its errors go to `~/.autostart.log`.
 
-## What you get
+## Keys
 
-| Program | What it does |
-| --- | --- |
-| dwm | Arranges your windows. This is the core of the desktop. |
-| dwmblocks | The top bar: volume, battery and clock. |
-| Rofi | App launcher and menus. |
-| xfce4-terminal | The terminal (where you type commands), in Gruvbox Dark Hard colours. |
-| Dunst | Pop-up notifications. |
-| Picom | Rounds the corners of Rofi menus, and nothing else. |
-| Feh | Sets the wallpaper. |
-| Firefox | Web browser. Super+B opens Brave instead if you have it. |
-| PCManFM | File manager. `gvfs` adds trash and drive support. |
-| NetworkManager | Wi-Fi and network, with an icon in the top bar. |
-| PipeWire | Sound. |
-| ufw | Firewall. Blocks incoming connections, allows outgoing ones. |
-| Touchpad settings | Tap to click. |
+Super is the Windows key. Super+Enter terminal, Super+Space launcher, Super+W wallpaper, Super+B browser (Brave if installed, otherwise Firefox), Super+E files, Super+Q close window, Super+1 to 5 workspaces (add Shift to move a window there), Super+J/K switch windows, Super+Shift+S power menu, Super+Shift+R restart dwm.
 
-## Keyboard shortcuts
+## Change things
 
-**Super** is the Windows key.
+Change a file in this repo folder (for example `dwm/config.h` for keys, or `rofi/` for the launcher), then run `./install.sh` again. It rebuilds dwm and copies the files. Then press Super+Shift+R.
 
-| Keys | What happens |
-| --- | --- |
-| Super + Enter | Open a terminal |
-| Super + Space | Open the app launcher |
-| Super + W | Change the wallpaper |
-| Super + B | Open the browser (Brave if installed, otherwise Firefox) |
-| Super + E | Open the file manager |
-| Super + Q | Close the window |
-| Super + 1 to 5 | Go to workspace 1 to 5 |
-| Super + Shift + 1 to 5 | Move the window to workspace 1 to 5 |
-| Super + J / K | Switch between windows |
-| Super + Shift + S | Power menu: lock, sleep, log out, reboot, shut down |
-| Super + Shift + R | Restart dwm |
+## If something is wrong
 
-## If an AI assistant is helping you
+- `./install.sh --check` lists missing or different files as `FAIL` lines. Run `./install.sh` again to fix them.
+- No status bar or wallpaper: dwm was probably already running during the install. Type `pkill -x dwm`, then `startx`.
+- To preview without changing anything: `./install.sh --dry-run`. More details are in `docs/`.
 
-Give it these rules:
-
-1. Run only these steps, in order: install `git`, `git clone`, `./install.sh`, then `pkill -x dwm` and `startx`, then `./install.sh --check`.
-2. Do not copy config files by hand. Installing a program does not install its settings. Only `./install.sh` does both.
-3. If a check fails, send the lines that start with `FAIL`.
-
-## Safe to try
-
-You can look before you change anything:
-
-```bash
-./install.sh --dry-run   # show what would happen, change nothing
-./install.sh --check     # check an existing install, change nothing
-./install.sh --yes       # install without asking questions
-./install.sh --help      # show all options
-```
-
-Running the installer twice is safe. Replaced files are saved in `~/.local/state/dwm-dotfiles/backups/`.
-
-## More help
-
-- [docs/INSTALL.md](docs/INSTALL.md) - install details
-- [docs/DWM.md](docs/DWM.md) - change keys and the top bar
-- [docs/ARCH.md](docs/ARCH.md) - notes for Arch Linux
-- [docs/DEBIAN.md](docs/DEBIAN.md) - notes for Debian and similar
-- [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) - when something goes wrong
-
-## License
-
-See the [LICENSE](LICENSE) file.
+AI assistants: run only the three quick-start steps, then `./install.sh --check`. Never copy files by hand, because installing a program does not install its settings. If a check fails, send the lines starting with `FAIL`.

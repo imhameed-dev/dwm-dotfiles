@@ -67,6 +67,7 @@ collect() {
     PAIRS+=("$SRC/.autostart.sh" "$HOME/.autostart.sh")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")
+    PAIRS+=("$SRC/.bashrc" "$HOME/.bashrc")
     PAIRS+=("$SRC/xfce4-terminal/xfce4-terminal.xml" "$CONF/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal.xml")
     for d in rofi dunst picom; do
         add_tree "$SRC/$d" "$CONF/$d"
@@ -109,7 +110,7 @@ verify() {
     check "firewall (ufw) is not running" systemctl is-active --quiet ufw
     check "home folders were not created (Documents)" test -d "$HOME/Documents"
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
-             brightnessctl i3lock notify-send pcmanfm; do
+             brightnessctl i3lock notify-send thunar; do
         check "command not found: $c" command -v "$c"
     done
     check "ImageMagick (magick or convert) not found" have_imagemagick
@@ -119,14 +120,14 @@ verify() {
 }
 
 install_packages() {
-    local -a common=(rofi dunst feh imagemagick pcmanfm brightnessctl i3lock xfce4-terminal picom ufw xdg-user-dirs gvfs)
+    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xfce4-terminal picom ufw xdg-user-dirs gvfs)
     case $DISTRO in
         arch)
             run sudo pacman -S --needed -- "${common[@]}" \
                 base-devel pkgconf libx11 libxft libxinerama \
                 xorg-server xorg-xinit libinput \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
-                networkmanager network-manager-applet libnotify ttf-jetbrains-mono firefox
+                networkmanager network-manager-applet libnotify ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono firefox
             ;;
         debian)
             run sudo apt-get update
