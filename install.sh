@@ -127,7 +127,7 @@ install_packages() {
                 base-devel pkgconf libx11 libxft libxinerama \
                 xorg-server xorg-xinit libinput \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
-                networkmanager network-manager-applet libnotify ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono firefox
+                networkmanager network-manager-applet libnotify xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono firefox
             ;;
         debian)
             run sudo apt-get update
