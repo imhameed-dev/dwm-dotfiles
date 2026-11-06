@@ -65,7 +65,7 @@ static const Layout layouts[] = {
 /* ======================= COMMANDS (programs launched by keys) ======================= */
 static const char *termcmd[] = { "xfce4-terminal", NULL };
 static const char *roficmd[] = { "rofi", "-show", "drun", NULL };
-static const char *browsercmd[] = { "/bin/sh", "-c", "for b in brave firefox firefox-esr; do command -v $b >/dev/null && exec $b; done", NULL };
+static const char *browsercmd[] = { "/bin/sh", "-c", "for b in firefox firefox-esr brave; do command -v $b >/dev/null && exec $b; done", NULL };
 static const char *thunarcmd[] = { "thunar", NULL };
 static const char *powermenucmd[] = { "/bin/sh", "-c", "bash $HOME/.config/rofi/scripts/powermenu.sh", NULL };
 static const char *autostartcmd[] = { "/bin/sh", "-c", "sh $HOME/.autostart.sh", NULL };

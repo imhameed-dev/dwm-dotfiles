@@ -6,6 +6,6 @@ The installer uses APT on Debian and Debian-based systems. It detects them from 
 
 Sound uses PipeWire and WirePlumber. Wi-Fi uses NetworkManager with a tray icon (`network-manager-gnome`).
 
-Browser: Firefox is installed (`firefox`, or `firefox-esr` if that is all your release has). If you already use Brave, Super+B opens it instead.
+Browser: Firefox is installed (`firefox`, or `firefox-esr` if that is all your release has). Super+B opens Firefox first and uses Brave only if Firefox is missing.
 
 The installer turns on NetworkManager and the `ufw` firewall, and never removes packages.

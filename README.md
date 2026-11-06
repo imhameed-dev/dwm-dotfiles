@@ -28,9 +28,9 @@ You log in on the text screen (tty1), `.bash_profile` runs `startx`, `.xinitrc` 
 
 ## Keys
 
-Super is the Windows key. Super+Enter terminal, Super+Space launcher, Super+W wallpaper, Super+B browser (Brave if installed, otherwise Firefox), Super+E files, Super+Q close window, Super+1 to 5 workspaces (add Shift to move a window there), Super+J/K switch windows, Super+Shift+S power menu, Super+Shift+R restart dwm.
+Super is the Windows key. Super+Enter terminal, Super+Space launcher, Super+W wallpaper, Super+B browser (Firefox; Brave only if Firefox is missing), Super+E files, Super+Q close window, Super+1 to 5 workspaces (add Shift to move a window there), Super+J/K switch windows, Super+Shift+S power menu, Super+Shift+R restart dwm.
 
-Browser: Firefox is installed by default and runs well on low-RAM machines, so it is the recommended choice there. Brave is optional: if you install it yourself, Super+B opens it instead.
+Browser: Firefox is installed by default and runs well on low-RAM machines, so it is the recommended choice there. Brave is optional: Super+B opens Firefox first and uses Brave only if Firefox is missing.
 
 ## Change things
 
