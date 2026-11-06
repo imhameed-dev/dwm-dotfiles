@@ -14,7 +14,7 @@ That is all. The rest explains what happened, for the curious.
 
 It asks for your password once (`sudo`), then:
 
-- installs the programs: Xorg, dwm's build tools, Rofi (launcher), Dunst (notifications), Picom (rounds Rofi corners only), Feh (wallpaper), PCManFM (files), xfce4-terminal, NetworkManager (Wi-Fi), PipeWire (sound), brightnessctl, i3lock, ImageMagick, Firefox and the JetBrains Mono font;
+- installs the programs: Xorg, dwm's build tools, Rofi (launcher), Dunst (notifications), Picom (rounds Rofi corners only), Feh (wallpaper), Thunar (files), xfce4-terminal, NetworkManager (Wi-Fi), PipeWire (sound), brightnessctl, i3lock, ImageMagick, Firefox and the JetBrains Mono font;
 - builds dwm and the status bar (dwmblocks) from the source in this repo;
 - copies the settings: `~/.xinitrc`, `~/.autostart.sh`, `~/.bash_profile`, `~/.config/rofi`, `dunst` and `picom`, the wallpapers in `~/Pictures/wallpapers`, the touchpad file `/etc/X11/xorg.conf.d/40-libinput.conf`, and the terminal colours (Gruvbox Dark Hard);
 - turns on the `ufw` firewall (blocks incoming connections, allows outgoing ones) and creates your folders (Documents, Downloads and so on);
