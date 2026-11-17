@@ -88,8 +88,6 @@ check() {
 }
 
 have_imagemagick() { command -v magick || command -v convert; }
-have_browser() { command -v brave || command -v firefox || command -v firefox-esr; }
-
 verify() {
     local i src dest c
     log "Verifying"
@@ -114,7 +112,8 @@ verify() {
         check "command not found: $c" command -v "$c"
     done
     check "ImageMagick (magick or convert) not found" have_imagemagick
-    check "no web browser found (brave, firefox or firefox-esr)" have_browser
+    # Brave Origin is not in the normal package lists, so a missing one is only a warning.
+    command -v brave-origin >/dev/null 2>&1 || printf '  WARN: brave-origin not found (Super+B needs it; see docs/MANUAL.md)\n'
     printf '==> Checks: %d passed, %d failed\n' "$PASS" "$FAIL"
     ((FAIL == 0))
 }
@@ -127,7 +126,7 @@ install_packages() {
                 base-devel pkgconf libx11 libxft libxinerama \
                 xorg-server xorg-xinit libinput \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
-                networkmanager network-manager-applet libnotify xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono firefox
+                networkmanager network-manager-applet libnotify xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono
             ;;
         debian)
             run sudo apt-get update
@@ -136,7 +135,6 @@ install_packages() {
                 xorg xinit xserver-xorg-input-libinput \
                 pipewire pipewire-audio pipewire-pulse wireplumber pulseaudio-utils \
                 network-manager network-manager-gnome libnotify-bin fonts-jetbrains-mono
-            run sudo apt-get install -y firefox || run sudo apt-get install -y firefox-esr
             ;;
     esac
 }

@@ -34,7 +34,6 @@ static const Rule rules[] = {
 */
 /* class instance title tags mask isfloating monitor */
 { "Gimp", NULL, NULL, 0, 1, -1 },
-{ "firefox", NULL, NULL, 1 << 0, 0, -1 },
 };
 
 /* ======================= LAYOUTS ======================= */
@@ -65,7 +64,7 @@ static const Layout layouts[] = {
 /* ======================= COMMANDS (programs launched by keys) ======================= */
 static const char *termcmd[] = { "xfce4-terminal", NULL };
 static const char *roficmd[] = { "rofi", "-show", "drun", NULL };
-static const char *browsercmd[] = { "/bin/sh", "-c", "for b in firefox firefox-esr brave; do command -v $b >/dev/null && exec $b; done", NULL };
+static const char *browsercmd[] = { "brave-origin", NULL };
 static const char *thunarcmd[] = { "thunar", NULL };
 static const char *powermenucmd[] = { "/bin/sh", "-c", "bash $HOME/.config/rofi/scripts/powermenu.sh", NULL };
 static const char *autostartcmd[] = { "/bin/sh", "-c", "sh $HOME/.autostart.sh", NULL };
@@ -78,7 +77,7 @@ static const Key keys[] = {
 { MODKEY, XK_Return, spawn, {.v = termcmd } }, /* Super+Enter -> xfce4-terminal */
 { MODKEY, XK_space, spawn, {.v = roficmd } }, /* Super+Space -> Rofi */
 { MODKEY, XK_w, spawn, {.v = wallpapermenucmd } }, /* Super+W -> wallpaper */
-{ MODKEY, XK_b, spawn, {.v = browsercmd } }, /* Super+B -> Browser */
+{ MODKEY, XK_b, spawn, {.v = browsercmd } }, /* Super+B -> Brave Origin */
 { MODKEY, XK_e, spawn, {.v = thunarcmd } }, /* Super+E -> Thunar */
 { MODKEY|ShiftMask, XK_s, spawn, {.v = powermenucmd } }, /* Super+Shift+S -> Power menu */
 
