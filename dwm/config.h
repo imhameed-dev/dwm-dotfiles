@@ -51,79 +51,94 @@ static const Layout layouts[] = {
 };
 
 /* ======================= KEY DEFINITIONS / MACROS ======================= */
+/*
+ * HOW TO CHANGE A SHORTCUT
+ *   Every line in keys[] below has 4 parts:
+ *       { modifier,  key,  action,  argument },
+ *   - modifier: MODKEY is the Super (Windows) key. Add more with |, for example
+ *               MODKEY|ShiftMask is Super+Shift. A 0 means no modifier.
+ *   - key:      XK_a to XK_z, XK_1, XK_Return, XK_space ... (list: /usr/include/X11/keysymdef.h)
+ *   - action:   spawn starts a program, other names are dwm actions (killclient, view ...).
+ *   - argument: for spawn, the command (see COMMANDS below).
+ *   After you edit this file, rebuild and restart dwm:
+ *       make -C dwm clean && make -C dwm && sudo make -C dwm install
+ *       then press Super+Shift+R.
+ */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
-{ MODKEY, KEY, view, {.ui = 1 << TAG} }, \
-{ MODKEY|ControlMask, KEY, toggleview, {.ui = 1 << TAG} }, \
-{ MODKEY|ShiftMask, KEY, tag, {.ui = 1 << TAG} }, \
+{ MODKEY,                    KEY, view,       {.ui = 1 << TAG} }, \
+{ MODKEY|ControlMask,        KEY, toggleview, {.ui = 1 << TAG} }, \
+{ MODKEY|ShiftMask,          KEY, tag,        {.ui = 1 << TAG} }, \
 { MODKEY|ControlMask|ShiftMask, KEY, toggletag, {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* ======================= COMMANDS (programs launched by keys) ======================= */
-static const char *termcmd[] = { "xfce4-terminal", NULL };
-static const char *roficmd[] = { "rofi", "-show", "drun", NULL };
-static const char *browsercmd[] = { "brave-origin", NULL };
-static const char *thunarcmd[] = { "thunar", NULL };
-static const char *powermenucmd[] = { "/bin/sh", "-c", "bash $HOME/.config/rofi/scripts/powermenu.sh", NULL };
-static const char *autostartcmd[] = { "/bin/sh", "-c", "sh $HOME/.autostart.sh", NULL };
+static const char *termcmd[]          = { "xfce4-terminal", NULL };
+static const char *roficmd[]          = { "rofi", "-show", "drun", NULL };
+static const char *browsercmd[]       = { "brave-origin", NULL };   /* change this to use another browser */
+static const char *thunarcmd[]        = { "thunar", NULL };
+static const char *powermenucmd[]     = { "/bin/sh", "-c", "bash $HOME/.config/rofi/scripts/powermenu.sh", NULL };
+static const char *autostartcmd[]     = { "/bin/sh", "-c", "sh $HOME/.autostart.sh", NULL };
 static const char *wallpapermenucmd[] = { "/bin/sh", "-c", "bash $HOME/.config/rofi/scripts/wallpaper-menu.sh", NULL };
 
+/* ======================= KEYBOARD SHORTCUTS ======================= */
+/* "Super" below means the Windows key. */
 static const Key keys[] = {
-/* modifier key function argument */
+/* modifier           key                         action          argument                       what it does */
 
 /* ---------- Applications ---------- */
-{ MODKEY, XK_Return, spawn, {.v = termcmd } }, /* Super+Enter -> xfce4-terminal */
-{ MODKEY, XK_space, spawn, {.v = roficmd } }, /* Super+Space -> Rofi */
-{ MODKEY, XK_w, spawn, {.v = wallpapermenucmd } }, /* Super+W -> wallpaper */
-{ MODKEY, XK_b, spawn, {.v = browsercmd } }, /* Super+B -> Brave Origin */
-{ MODKEY, XK_e, spawn, {.v = thunarcmd } }, /* Super+E -> Thunar */
-{ MODKEY|ShiftMask, XK_s, spawn, {.v = powermenucmd } }, /* Super+Shift+S -> Power menu */
+{ MODKEY,             XK_Return,                  spawn,          {.v = termcmd } },             /* Super+Enter        terminal */
+{ MODKEY,             XK_space,                   spawn,          {.v = roficmd } },             /* Super+Space        app launcher (Rofi) */
+{ MODKEY,             XK_w,                       spawn,          {.v = wallpapermenucmd } },    /* Super+W            wallpaper menu */
+{ MODKEY,             XK_b,                       spawn,          {.v = browsercmd } },          /* Super+B            browser (Brave Origin) */
+{ MODKEY,             XK_e,                       spawn,          {.v = thunarcmd } },           /* Super+E            files (Thunar) */
+{ MODKEY|ShiftMask,   XK_s,                       spawn,          {.v = powermenucmd } },        /* Super+Shift+S      power menu */
 
-/* ---------- Volume & Media Keys ---------- */
-{ 0, XF86XK_AudioRaiseVolume, spawn, SHCMD("pactl set-sink-volume @DEFAULT_SINK@ +5%; pkill -RTMIN+10 dwmblocks") },
-{ 0, XF86XK_AudioLowerVolume, spawn, SHCMD("pactl set-sink-volume @DEFAULT_SINK@ -5%; pkill -RTMIN+10 dwmblocks") },
-{ 0, XF86XK_AudioMute, spawn, SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle; pkill -RTMIN+10 dwmblocks") },
+/* ---------- Volume and media keys (the bar refreshes through pkill -RTMIN+10 dwmblocks) ---------- */
+{ 0,                  XF86XK_AudioRaiseVolume,    spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ +5%; pkill -RTMIN+10 dwmblocks") },    /* volume up */
+{ 0,                  XF86XK_AudioLowerVolume,    spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ -5%; pkill -RTMIN+10 dwmblocks") },    /* volume down */
+{ 0,                  XF86XK_AudioMute,           spawn,          SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle; pkill -RTMIN+10 dwmblocks") },   /* mute */
 
-/* ---------- Brightness Control   ----------- */
-{ 0, XF86XK_MonBrightnessUp, spawn, SHCMD("brightnessctl set +10%") },
-{ 0, XF86XK_MonBrightnessDown, spawn, SHCMD("brightnessctl --min-value=1 set 10%-") },
+/* ---------- Brightness ---------- */
+{ 0,                  XF86XK_MonBrightnessUp,     spawn,          SHCMD("brightnessctl set +10%") },                       /* brightness up */
+{ 0,                  XF86XK_MonBrightnessDown,   spawn,          SHCMD("brightnessctl --min-value=1 set 10%-") },         /* brightness down */
 
-/* ---------- Window Focus & Management ---------- */
-{ MODKEY, XK_j, focusstack, {.i = +1 } },
-{ MODKEY, XK_k, focusstack, {.i = -1 } },
-{ MODKEY, XK_q, killclient, {0} }, /* Super+Q -> Close window */
-{ MODKEY|ShiftMask, XK_Return, zoom, {0} }, /* Super+Shift+Enter -> swap with master */
-{ MODKEY|ShiftMask, XK_space, togglefloating, {0} },
-{ MODKEY, XK_Tab, view, {0} },
-{ MODKEY, XK_comma, focusmon, {.i = -1 } },
-{ MODKEY, XK_period, focusmon, {.i = +1 } },
-{ MODKEY|ShiftMask, XK_comma, tagmon, {.i = -1 } },
-{ MODKEY|ShiftMask, XK_period, tagmon, {.i = +1 } },
+/* ---------- Windows ---------- */
+{ MODKEY,             XK_j,                       focusstack,     {.i = +1 } },                  /* Super+J            next window */
+{ MODKEY,             XK_k,                       focusstack,     {.i = -1 } },                  /* Super+K            previous window */
+{ MODKEY,             XK_q,                       killclient,     {0} },                         /* Super+Q            close window */
+{ MODKEY|ShiftMask,   XK_Return,                  zoom,           {0} },                         /* Super+Shift+Enter  swap with the main window */
+{ MODKEY|ShiftMask,   XK_space,                   togglefloating, {0} },                         /* Super+Shift+Space  float or tile the window */
+{ MODKEY,             XK_Tab,                     view,           {0} },                         /* Super+Tab          previous workspace */
+{ MODKEY,             XK_comma,                   focusmon,       {.i = -1 } },                  /* Super+,            previous monitor */
+{ MODKEY,             XK_period,                  focusmon,       {.i = +1 } },                  /* Super+.            next monitor */
+{ MODKEY|ShiftMask,   XK_comma,                   tagmon,         {.i = -1 } },                  /* Super+Shift+,      move window to previous monitor */
+{ MODKEY|ShiftMask,   XK_period,                  tagmon,         {.i = +1 } },                  /* Super+Shift+.      move window to next monitor */
 
-/* ---------- Layout Control ---------- */
-{ MODKEY, XK_i, incnmaster, {.i = +1 } },
-{ MODKEY, XK_d, incnmaster, {.i = -1 } },
-{ MODKEY, XK_h, setmfact, {.f = -0.05} },
-{ MODKEY, XK_l, setmfact, {.f = +0.05} },
-{ MODKEY, XK_t, setlayout, {.v = &layouts[0]} }, /* tiled layout */
-{ MODKEY, XK_f, setlayout, {.v = &layouts[1]} }, /* floating layout */
-{ MODKEY, XK_m, setlayout, {.v = &layouts[2]} }, /* monocle layout */
-{ MODKEY, XK_o, setlayout, {0} }, /* Super+O -> cycle layout */
+/* ---------- Layout ---------- */
+{ MODKEY,             XK_i,                       incnmaster,     {.i = +1 } },                  /* Super+I            more windows in the main area */
+{ MODKEY,             XK_d,                       incnmaster,     {.i = -1 } },                  /* Super+D            fewer windows in the main area */
+{ MODKEY,             XK_h,                       setmfact,       {.f = -0.05} },                /* Super+H            shrink the main area */
+{ MODKEY,             XK_l,                       setmfact,       {.f = +0.05} },                /* Super+L            grow the main area */
+{ MODKEY,             XK_t,                       setlayout,      {.v = &layouts[0]} },          /* Super+T            tiled layout */
+{ MODKEY,             XK_f,                       setlayout,      {.v = &layouts[1]} },          /* Super+F            floating layout */
+{ MODKEY,             XK_m,                       setlayout,      {.v = &layouts[2]} },          /* Super+M            monocle layout (one window full screen) */
+{ MODKEY,             XK_o,                       setlayout,      {0} },                         /* Super+O            switch between layouts */
 
-/* ---------- Workspaces (Tags) ---------- */
-{ MODKEY, XK_0, view, {.ui = ~0 } },
-{ MODKEY|ShiftMask, XK_0, tag, {.ui = ~0 } },
-TAGKEYS( XK_1, 0)
-TAGKEYS( XK_2, 1)
-TAGKEYS( XK_3, 2)
-TAGKEYS( XK_4, 3)
-TAGKEYS( XK_5, 4)
+/* ---------- Workspaces (Super+1..5 go there, add Shift to move the window there) ---------- */
+{ MODKEY,             XK_0,                       view,           {.ui = ~0 } },                 /* Super+0            show all workspaces */
+{ MODKEY|ShiftMask,   XK_0,                       tag,            {.ui = ~0 } },                 /* Super+Shift+0      window on all workspaces */
+TAGKEYS(                                          XK_1,                        0)
+TAGKEYS(                                          XK_2,                        1)
+TAGKEYS(                                          XK_3,                        2)
+TAGKEYS(                                          XK_4,                        3)
+TAGKEYS(                                          XK_5,                        4)
 
-/* ---------- DWM Control ---------- */
-{ MODKEY|ShiftMask, XK_b, togglebar, {0} }, /* Super+Shift+B -> toggle bar */
-{ MODKEY|ShiftMask, XK_r, restart, {0} }, /* Super+Shift+R -> restart DWM */
+/* ---------- dwm itself ---------- */
+{ MODKEY|ShiftMask,   XK_b,                       togglebar,      {0} },                         /* Super+Shift+B      show or hide the bar */
+{ MODKEY|ShiftMask,   XK_r,                       restart,        {0} },                         /* Super+Shift+R      restart dwm */
 };
 
 /* ======================= MOUSE BUTTONS ======================= */
