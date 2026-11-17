@@ -176,7 +176,11 @@ Two different things can be updated. Ask which one if the user did not say.
 
 ## 14. Saving to GitHub
 
-Only after the check passes. Run each command as its own step:
+Pushing to https://github.com/imhameed-dev/dwm-dotfiles is only for its owner. Another person never needs permission to push there, and you must never ask for it. Everyone else works on their own copy:
+
+1. Find out whose repo this is: `cd ~/dwm-dotfiles && git remote -v && gh auth status`. If `origin` is the owner's repo and the logged-in GitHub account is a different one, the user is not the owner.
+2. A user who is not the owner makes their own copy with `gh repo fork --remote` (or creates an empty repo on their own GitHub and runs `git remote set-url origin <their repo>`). They push to that, on their own account. Opening a pull request to the original repo is optional, and only if the user asks for it.
+3. Only after the check passes. Run each command as its own step:
 
 ```bash
 cd ~/dwm-dotfiles
@@ -189,6 +193,12 @@ gh run list --limit 1
 ```
 
 - The `grep` must print nothing. If it prints a line, remove the home-folder path first.
-- `gh run list --limit 1` shows whether the Validate workflow passed. Wait for it before saying the push is good.
-- The user must be logged in to GitHub (`gh auth status`). If not, `gh auth login`.
+- `gh run list --limit 1` shows whether the Validate workflow passed (it runs on the user's own copy if the repo has Actions enabled). Wait for it before saying the push is good.
+- If the user is not logged in, `gh auth login`. Never ask the user to paste a password or token into the chat.
 
+### Privacy rules
+
+- Never share or write down personal information about the user or the owner (name, email, user name, host name, Wi-Fi name or interface, display model, tokens, passwords) in a commit, a file in the repo, a public message or an answer, unless the user clearly asks you to.
+- Before each commit, run `git diff --cached` and read it for personal data. If you find any, stop and ask the user.
+- Do not copy anything from the user's own computer (files, logs, outputs) into the repo without showing it to the user first and getting a yes.
+- The commit author comes from the user's own git settings. Do not change `git config` and do not read or print the user's email unless asked.
