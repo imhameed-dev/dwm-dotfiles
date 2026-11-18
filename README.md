@@ -12,3 +12,17 @@ A tiny, fast Linux desktop for old computers: the dwm window manager with a top 
 
 - [docs/MANUAL.md](docs/MANUAL.md): short manual for people (install, keys, change the browser, fixes).
 - [docs/AI.md](docs/AI.md): full guide for AI assistants. If you ask an AI to install or change this system, give it this file first.
+
+## Screenshots
+
+The desktop, the app launcher (Super+Space), the wallpaper menu (Super+W), the power menu (Super+Shift+S), and a terminal (Super+Enter) running `fastfetch`.
+
+![Desktop](screenshots/desktop.png)
+
+![App launcher](screenshots/launcher.png)
+
+![Wallpaper menu](screenshots/wallpaper-menu.png)
+
+![Power menu](screenshots/power-menu.png)
+
+![Terminal](screenshots/terminal.png)
