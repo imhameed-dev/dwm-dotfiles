@@ -11,6 +11,7 @@ A tiny, fast Linux desktop for old computers: the dwm window manager with a top 
 ## Documents
 
 - [docs/MANUAL.md](docs/MANUAL.md): short manual for people (install, keys, change the browser, fixes).
+- [docs/SHORTCUTS.md](docs/SHORTCUTS.md): every keyboard and mouse shortcut and what it does.
 - [docs/AI.md](docs/AI.md): full guide for AI assistants. If you ask an AI to install or change this system, give it this file first.
 
 ## Screenshots

@@ -13,6 +13,8 @@ Use your normal user, not root. The installer asks for your password once. Your 
 
 ## Keys (Super is the Windows key)
 
+The main keys are below. The full list, including mouse actions, is in [SHORTCUTS.md](SHORTCUTS.md).
+
 | Keys | Action |
 | --- | --- |
 | Super+Enter | terminal |
