@@ -7,7 +7,7 @@ A tiny, fast Linux desktop for old computers. You do not need an AI to use it. I
 1. Install git: `sudo pacman -S git` (Arch) or `sudo apt install git` (Debian, Ubuntu).
 2. Run: `git clone https://github.com/imhameed-dev/dwm-dotfiles.git && cd dwm-dotfiles && ./install.sh`
 3. Install Brave Origin yourself (see below).
-4. Log in on the text screen. The desktop starts by itself, or type `startx`. If dwm was already running, type `pkill -x dwm` first.
+4. Log in on the text screen. The desktop starts by itself, or type `startx`. If you use a graphical login screen, choose `dwm` in its session list. If dwm was already running, type `pkill -x dwm` first.
 
 Use your normal user, not root. The installer asks for your password once. Your own `.bashrc`, `.bash_profile` and `.xinitrc` are kept if you already have them and changed them (add `--dotfiles` to replace them with the repo versions). Any other file that is replaced is saved first in `~/.local/state/dwm-dotfiles/backups/`.
 

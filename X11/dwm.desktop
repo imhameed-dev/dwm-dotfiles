@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=dwm
+Comment=Dynamic window manager (starts ~/.autostart.sh by itself)
+Exec=/usr/local/bin/dwm
+TryExec=/usr/local/bin/dwm
+Type=XSession

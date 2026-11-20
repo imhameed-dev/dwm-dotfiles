@@ -54,7 +54,8 @@ Rules:
 3. Enables NetworkManager, and creates the home folders. The firewall is not touched unless the user asks for `--firewall`: then it installs `ufw`, allows SSH first if an SSH server is installed, and turns it on (incoming blocked, outgoing allowed).
 4. Builds and installs dwm and dwmblocks from the source in this repo. It never downloads another dwm.
 5. Copies the settings. The user's own `~/.bashrc`, `~/.bash_profile` and `~/.xinitrc` are kept if they exist and differ (unless `--dotfiles`). Any other different existing file is first moved to `~/.local/state/dwm-dotfiles/backups/<timestamp>/`.
-6. Verifies everything and prints `Checks: N passed, N failed`.
+6. Adds a `dwm` entry to `/usr/share/xsessions/` so login screens (GDM, LightDM, SDDM) list it. It is a copy of `X11/dwm.desktop`, not a link.
+7. Verifies everything and prints `Checks: N passed, N failed`.
 
 ## 4. The browser
 

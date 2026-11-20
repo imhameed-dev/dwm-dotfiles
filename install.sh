@@ -127,6 +127,8 @@ verify() {
     done
     check "missing or different from the repo: /etc/X11/xorg.conf.d/40-libinput.conf" \
         cmp -s "$SRC/X11/40-libinput.conf" /etc/X11/xorg.conf.d/40-libinput.conf
+    check "missing or different from the repo: /usr/share/xsessions/dwm.desktop (login screen entry)" \
+        cmp -s "$SRC/X11/dwm.desktop" /usr/share/xsessions/dwm.desktop
     check "dwm is not installed in /usr/local/bin" test -x /usr/local/bin/dwm
     check "installed dwm does not start ~/.autostart.sh (rebuild and reinstall dwm)" \
         grep -q '\.autostart\.sh' /usr/local/bin/dwm
@@ -245,6 +247,8 @@ main() {
         put "${PAIRS[i]}" "${PAIRS[i + 1]}"
     done
     put "$SRC/X11/40-libinput.conf" /etc/X11/xorg.conf.d/40-libinput.conf sudo
+    # A real copy, not a link: some login screens do not see linked session files.
+    put "$SRC/X11/dwm.desktop" /usr/share/xsessions/dwm.desktop sudo
 
     if ((!DRY)); then
         verify || die "$FAIL check(s) failed, see above"
