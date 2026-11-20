@@ -45,7 +45,7 @@ Rules:
 - Run as a normal user, never as root. The script asks for the `sudo` password itself.
 - Never copy files by hand. Installing a program does not install its settings. If something is missing, run `./install.sh` again.
 - If a check fails, ask the user to send the lines that start with `FAIL`.
-- Options: `--dry-run` shows what would happen, `--yes` skips the confirmation question, `--check` only verifies.
+- Options: `--dry-run` shows what would happen, `--yes` skips the confirmation question, `--check` only verifies, `--firewall` also sets up ufw, `--dotfiles` replaces the user's own `~/.bashrc`, `~/.bash_profile` and `~/.xinitrc` (without it, such files are kept when they exist and differ from the repo).
 
 ### What the installer does
 
@@ -53,7 +53,7 @@ Rules:
 2. Installs packages: Xorg, build tools, Rofi, Dunst, Picom, Feh, Thunar with gvfs, xfce4-terminal, NetworkManager with tray applet, PipeWire (with pipewire-pulse and WirePlumber), brightnessctl, i3lock, ImageMagick, xdg-user-dirs, xdg-utils with the GTK portal (Arch list), JetBrains Mono and the icons-only symbols font (Arch list).
 3. Enables NetworkManager, and creates the home folders. The firewall is not touched unless the user asks for `--firewall`: then it installs `ufw`, allows SSH first if an SSH server is installed, and turns it on (incoming blocked, outgoing allowed).
 4. Builds and installs dwm and dwmblocks from the source in this repo. It never downloads another dwm.
-5. Copies the settings. A different existing file is first moved to `~/.local/state/dwm-dotfiles/backups/<timestamp>/`.
+5. Copies the settings. The user's own `~/.bashrc`, `~/.bash_profile` and `~/.xinitrc` are kept if they exist and differ (unless `--dotfiles`). Any other different existing file is first moved to `~/.local/state/dwm-dotfiles/backups/<timestamp>/`.
 6. Verifies everything and prints `Checks: N passed, N failed`.
 
 ## 4. The browser

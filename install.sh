@@ -10,13 +10,14 @@ DRY=0
 YES=0
 CHECK=0
 FIREWALL=0
+DOTFILES=0
 PASS=0
 FAIL=0
 PAIRS=()   # alternating: file in this repo, place it is installed to
 
 usage() {
     cat <<'USAGE'
-Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [-h|--help]
+Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [--dotfiles] [-h|--help]
 
   --dry-run   print what would be done without changing anything
   --yes       do not ask for confirmation
@@ -24,8 +25,11 @@ Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [-h|--help]
   --firewall  also install and turn on the ufw firewall (incoming connections
               blocked; SSH is allowed first if an SSH server is installed).
               Without this option the firewall is not touched.
+  --dotfiles  replace your own ~/.bashrc, ~/.bash_profile and ~/.xinitrc with the
+              ones from this repo (the old files are backed up first).
+              Without this option files you already have and changed are kept.
 
-Existing files that differ are moved to ~/.local/state/dwm-dotfiles/backups/ first.
+Any file that is replaced is moved to ~/.local/state/dwm-dotfiles/backups/ first.
 USAGE
 }
 
@@ -65,6 +69,20 @@ add_tree() {
     done < <(find "$1" -type f -print0)
 }
 
+# personal DEST: true for the three files people usually edit by hand.
+personal() {
+    case $1 in
+        "$HOME/.bashrc"|"$HOME/.bash_profile"|"$HOME/.xinitrc") return 0 ;;
+    esac
+    return 1
+}
+
+# keep_personal DEST SRC: true when DEST is one of those files, already exists,
+# differs from the repo, and --dotfiles was not given (so it must be left alone).
+keep_personal() {
+    personal "$1" && [[ -e $1 || -L $1 ]] && ! cmp -s "$2" "$1" && ((!DOTFILES))
+}
+
 # The one list of what goes where (used for both installing and verifying).
 collect() {
     local d
@@ -98,6 +116,10 @@ verify() {
     for ((i = 0; i < ${#PAIRS[@]}; i += 2)); do
         src=${PAIRS[i]}
         dest=${PAIRS[i + 1]}
+        if keep_personal "$dest" "$src"; then
+            printf '  WARN: your own %s is different from the repo (kept; --dotfiles replaces it)\n' "$dest"
+            continue
+        fi
         check "missing or different from the repo: $dest" cmp -s "$src" "$dest"
         if [[ $src == *.sh ]]; then
             check "not executable: $dest" test -x "$dest"
@@ -155,6 +177,7 @@ main() {
             --yes) YES=1 ;;
             --check) CHECK=1 ;;
             --firewall) FIREWALL=1 ;;
+            --dotfiles) DOTFILES=1 ;;
             -h|--help) usage; exit 0 ;;
             *) die "unknown option: $1 (see --help)" ;;
         esac
@@ -215,6 +238,10 @@ main() {
     log "Copying configuration"
     local i
     for ((i = 0; i < ${#PAIRS[@]}; i += 2)); do
+        if keep_personal "${PAIRS[i + 1]}" "${PAIRS[i]}"; then
+            log "Kept your own ${PAIRS[i + 1]} (use --dotfiles to replace it)"
+            continue
+        fi
         put "${PAIRS[i]}" "${PAIRS[i + 1]}"
     done
     put "$SRC/X11/40-libinput.conf" /etc/X11/xorg.conf.d/40-libinput.conf sudo

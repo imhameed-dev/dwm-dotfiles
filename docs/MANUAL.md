@@ -9,7 +9,7 @@ A tiny, fast Linux desktop for old computers. You do not need an AI to use it. I
 3. Install Brave Origin yourself (see below).
 4. Log in on the text screen. The desktop starts by itself, or type `startx`. If dwm was already running, type `pkill -x dwm` first.
 
-Use your normal user, not root. The installer asks for your password once. Your old files are saved in `~/.local/state/dwm-dotfiles/backups/` before anything is replaced.
+Use your normal user, not root. The installer asks for your password once. Your own `.bashrc`, `.bash_profile` and `.xinitrc` are kept if you already have them and changed them (add `--dotfiles` to replace them with the repo versions). Any other file that is replaced is saved first in `~/.local/state/dwm-dotfiles/backups/`.
 
 ## Keys (Super is the Windows key)
 
@@ -46,7 +46,7 @@ Then press Super+Shift+R. For other settings (`rofi/`, `dunst/`), edit the file 
 
 ## If something is wrong
 
-- Run `./install.sh --check`. Lines that start with `FAIL` show what is missing. Run `./install.sh` again to fix it.
+- Run `./install.sh --check`. Lines that start with `FAIL` show what is missing. Lines that start with `WARN` are only notes (for example your own `.bashrc` is kept). Run `./install.sh` again to fix it.
 - No bar or wallpaper: dwm was already running during the install. Type `pkill -x dwm`, then `startx`. Errors are in `~/.autostart.log`.
 - To see what the installer would do without changing anything: `./install.sh --dry-run`.
 - The firewall is optional. Install with `./install.sh --firewall` to block incoming connections (SSH is allowed first if an SSH server is installed). See it with `sudo ufw status`.
