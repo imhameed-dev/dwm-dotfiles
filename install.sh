@@ -155,19 +155,41 @@ install_packages() {
     fi
     case $DISTRO in
         arch)
-            run sudo pacman -S --needed -- "${common[@]}" \
+            # -Syu (a full upgrade) is how Arch wants packages installed: a database
+            # that is refreshed without upgrading can leave the system half-updated.
+            local -a pm=(-Syu --needed)
+            ((YES)) && pm+=(--noconfirm)
+            log "Arch: updating the package database and the system, then installing"
+            run sudo pacman "${pm[@]}" -- "${common[@]}" \
                 base-devel pkgconf libx11 libxft libxinerama \
                 xorg-server xorg-xinit libinput \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
                 networkmanager network-manager-applet libnotify xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono
             ;;
         debian)
+            # The core packages are needed to build and start dwm, so a failure stops here.
+            # The rest are tried together first, then one by one, so that one package
+            # missing on an older release does not stop the others.
+            local -a core=(build-essential pkg-config libx11-dev libxft-dev libxinerama-dev
+                           xorg xinit xserver-xorg-input-libinput network-manager
+                           xdg-user-dirs libnotify-bin)
+            local -a optional=() skipped=()
+            local p
+            for p in "${common[@]}" pipewire pipewire-audio pipewire-pulse wireplumber \
+                     pulseaudio-utils network-manager-gnome fonts-jetbrains-mono; do
+                [[ $p == xdg-user-dirs ]] || optional+=("$p")
+            done
             run sudo apt-get update
-            run sudo apt-get install -y "${common[@]}" \
-                build-essential pkg-config libx11-dev libxft-dev libxinerama-dev \
-                xorg xinit xserver-xorg-input-libinput \
-                pipewire pipewire-audio pipewire-pulse wireplumber pulseaudio-utils \
-                network-manager network-manager-gnome libnotify-bin fonts-jetbrains-mono
+            run sudo apt-get install -y "${core[@]}"
+            if ! run sudo apt-get install -y "${optional[@]}"; then
+                log "Some optional packages could not be installed together; trying one by one"
+                for p in "${optional[@]}"; do
+                    run sudo apt-get install -y "$p" || skipped+=("$p")
+                done
+            fi
+            if ((${#skipped[@]})); then
+                log "WARNING: not installed (missing on this release): ${skipped[*]}"
+            fi
             ;;
     esac
 }
