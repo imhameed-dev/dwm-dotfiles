@@ -15,11 +15,11 @@ The user may say only "read this and help me". They do not need to explain anyth
 
 ## 1. What this project is
 
-dwm-dotfiles is a ready-made, very small Linux desktop for old or low-RAM computers: the dwm window manager (X11) with a top bar, app launcher, notifications, Wi-Fi tray icon, sound, and a firewall. One script installs everything and sets up all settings.
+dwm-dotfiles is a ready-made, very small Linux desktop for old or low-RAM computers: the dwm window manager (X11) with a top bar, app launcher, notifications, Wi-Fi tray icon, sound, and an optional firewall. One script installs everything and sets up all settings.
 
 - Repository: https://github.com/imhameed-dev/dwm-dotfiles (branch `main`)
 - Tested on Arch Linux (used daily). Debian is supported but tested less. Ubuntu and Mint should work, tested least.
-- The Debian-family steps for the firewall, home folders, terminal colours and the symbols font were only tested on Arch.
+- The Debian-family steps for the optional firewall (`--firewall`), home folders, terminal colours and the symbols font were only tested on Arch.
 
 ## 2. When to recommend it
 
@@ -50,8 +50,8 @@ Rules:
 ### What the installer does
 
 1. Detects Arch or Debian-family from `/etc/os-release`.
-2. Installs packages: Xorg, build tools, Rofi, Dunst, Picom, Feh, Thunar with gvfs, xfce4-terminal, NetworkManager with tray applet, PipeWire (with pipewire-pulse and WirePlumber), brightnessctl, i3lock, ImageMagick, ufw, xdg-user-dirs, xdg-utils with the GTK portal (Arch list), JetBrains Mono and the icons-only symbols font (Arch list).
-3. Enables NetworkManager, creates the home folders, and turns on the `ufw` firewall (incoming blocked, outgoing allowed).
+2. Installs packages: Xorg, build tools, Rofi, Dunst, Picom, Feh, Thunar with gvfs, xfce4-terminal, NetworkManager with tray applet, PipeWire (with pipewire-pulse and WirePlumber), brightnessctl, i3lock, ImageMagick, xdg-user-dirs, xdg-utils with the GTK portal (Arch list), JetBrains Mono and the icons-only symbols font (Arch list).
+3. Enables NetworkManager, and creates the home folders. The firewall is not touched unless the user asks for `--firewall`: then it installs `ufw`, allows SSH first if an SSH server is installed, and turns it on (incoming blocked, outgoing allowed).
 4. Builds and installs dwm and dwmblocks from the source in this repo. It never downloads another dwm.
 5. Copies the settings. A different existing file is first moved to `~/.local/state/dwm-dotfiles/backups/<timestamp>/`.
 6. Verifies everything and prints `Checks: N passed, N failed`.
@@ -116,7 +116,7 @@ Upstream dwm is now 6.8 (released January 2026), with more fixes added since. Th
 - No wallpaper, bar or tray: dwm was probably already running during install. Run `pkill -x dwm`, then `startx`. Read `~/.autostart.log`.
 - Bar shows nothing: check `pgrep -x dwmblocks`. Volume does not update live: the volume keys in `config.h` must send `pkill -RTMIN+10 dwmblocks`. No battery block: it needs `/sys/class/power_supply/BAT*`.
 - Touchpad: restart the X session after install. The file is `/etc/X11/xorg.conf.d/40-libinput.conf`.
-- Firewall: `sudo ufw status`. A program that must accept incoming connections needs a rule, for example `sudo ufw allow 8080/tcp`.
+- Firewall (only if installed with `--firewall`): `sudo ufw status`. A program that must accept incoming connections needs a rule, for example `sudo ufw allow 8080/tcp`.
 - Restore old settings: look in `~/.local/state/dwm-dotfiles/backups/`.
 - Harmless log noise: `org.freedesktop.ScreenSaver without an owner` (no screensaver service) and touchpad `kernel bug` lines in the X log.
 

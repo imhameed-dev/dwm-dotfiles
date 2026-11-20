@@ -9,17 +9,21 @@ BACKUP="${XDG_STATE_HOME:-$HOME/.local/state}/dwm-dotfiles/backups/$(date +%Y%m%
 DRY=0
 YES=0
 CHECK=0
+FIREWALL=0
 PASS=0
 FAIL=0
 PAIRS=()   # alternating: file in this repo, place it is installed to
 
 usage() {
     cat <<'USAGE'
-Usage: ./install.sh [--dry-run] [--yes] [--check] [-h|--help]
+Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [-h|--help]
 
   --dry-run   print what would be done without changing anything
   --yes       do not ask for confirmation
   --check     only verify an existing installation (no changes)
+  --firewall  also install and turn on the ufw firewall (incoming connections
+              blocked; SSH is allowed first if an SSH server is installed).
+              Without this option the firewall is not touched.
 
 Existing files that differ are moved to ~/.local/state/dwm-dotfiles/backups/ first.
 USAGE
@@ -105,7 +109,9 @@ verify() {
     check "installed dwm does not start ~/.autostart.sh (rebuild and reinstall dwm)" \
         grep -q '\.autostart\.sh' /usr/local/bin/dwm
     check "dwmblocks is not installed in /usr/local/bin" test -x /usr/local/bin/dwmblocks
-    check "firewall (ufw) is not running" systemctl is-active --quiet ufw
+    if ((FIREWALL)); then
+        check "firewall (ufw) is not running" systemctl is-active --quiet ufw
+    fi
     check "home folders were not created (Documents)" test -d "$HOME/Documents"
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
              brightnessctl i3lock notify-send thunar; do
@@ -119,7 +125,10 @@ verify() {
 }
 
 install_packages() {
-    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xfce4-terminal picom ufw xdg-user-dirs gvfs)
+    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xfce4-terminal picom xdg-user-dirs gvfs)
+    if ((FIREWALL)); then
+        common+=(ufw)
+    fi
     case $DISTRO in
         arch)
             run sudo pacman -S --needed -- "${common[@]}" \
@@ -145,6 +154,7 @@ main() {
             --dry-run) DRY=1 ;;
             --yes) YES=1 ;;
             --check) CHECK=1 ;;
+            --firewall) FIREWALL=1 ;;
             -h|--help) usage; exit 0 ;;
             *) die "unknown option: $1 (see --help)" ;;
         esac
@@ -178,11 +188,19 @@ main() {
     log "Creating the standard home folders"
     run xdg-user-dirs-update
 
-    log "Turning on the firewall (incoming connections blocked)"
-    run sudo ufw default deny incoming
-    run sudo ufw default allow outgoing
-    run sudo ufw --force enable
-    run sudo systemctl enable --now ufw
+    if ((FIREWALL)); then
+        log "Turning on the firewall (incoming connections blocked)"
+        run sudo ufw default deny incoming
+        run sudo ufw default allow outgoing
+        # Allow SSH first, so turning the firewall on cannot lock out a remote login.
+        if [[ -x /usr/bin/sshd || -x /usr/sbin/sshd ]]; then
+            run sudo ufw allow ssh
+        fi
+        run sudo ufw --force enable
+        run sudo systemctl enable --now ufw
+    else
+        log "Firewall not changed (add --firewall to turn on ufw)"
+    fi
 
     log "Building and installing dwm"
     run make -C "$SRC/dwm" clean

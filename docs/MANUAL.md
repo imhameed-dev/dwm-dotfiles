@@ -49,4 +49,4 @@ Then press Super+Shift+R. For other settings (`rofi/`, `dunst/`), edit the file 
 - Run `./install.sh --check`. Lines that start with `FAIL` show what is missing. Run `./install.sh` again to fix it.
 - No bar or wallpaper: dwm was already running during the install. Type `pkill -x dwm`, then `startx`. Errors are in `~/.autostart.log`.
 - To see what the installer would do without changing anything: `./install.sh --dry-run`.
-- Incoming connections are blocked by the firewall. See it with `sudo ufw status`.
+- The firewall is optional. Install with `./install.sh --firewall` to block incoming connections (SSH is allowed first if an SSH server is installed). See it with `sudo ufw status`.
