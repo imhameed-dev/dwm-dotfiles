@@ -27,6 +27,7 @@ The main keys are below. The full list, including mouse actions, is in [SHORTCUT
 | Super+1 to 5 | workspaces (add Shift to move a window there) |
 | Super+Shift+S | power menu |
 | Super+Shift+R | restart dwm |
+| Print / Shift+Print | screenshot of everything / of a box you drag (saved in `~/Pictures/screenshots`) |
 
 ## Browser (Brave Origin)
 

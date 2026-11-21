@@ -101,6 +101,10 @@ static const Key keys[] = {
 { 0,                  XF86XK_AudioLowerVolume,    spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ -5%; pkill -RTMIN+10 dwmblocks") },    /* volume down */
 { 0,                  XF86XK_AudioMute,           spawn,          SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle; pkill -RTMIN+10 dwmblocks") },   /* mute */
 
+/* ---------- Screenshots (saved in ~/Pictures/screenshots) ---------- */
+{ 0,                  XK_Print,                   spawn,          SHCMD("sh $HOME/.local/bin/screenshot full") },          /* Print              screenshot of all screens */
+{ ShiftMask,          XK_Print,                   spawn,          SHCMD("sh $HOME/.local/bin/screenshot area") },          /* Shift+Print        screenshot of a box you drag */
+
 /* ---------- Brightness ---------- */
 { 0,                  XF86XK_MonBrightnessUp,     spawn,          SHCMD("brightnessctl set +10%") },                       /* brightness up */
 { 0,                  XF86XK_MonBrightnessDown,   spawn,          SHCMD("brightnessctl --min-value=1 set 10%-") },         /* brightness down */
