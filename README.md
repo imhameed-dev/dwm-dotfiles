@@ -27,3 +27,10 @@ The desktop, the app launcher (Super+Space), the wallpaper menu (Super+W), the p
 ![Power menu](screenshots/power-menu.png)
 
 ![Terminal](screenshots/terminal.png)
+
+## Licences
+
+- **dwm** (folder `dwm/`) and the rest of this repo: MIT/X Consortium licence, see [LICENSE](LICENSE).
+- **dwmblocks** (folder `dwmblocks/`): GPL-2.0, see [dwmblocks/COPYING](dwmblocks/COPYING). It is based on an upstream dwmblocks program, and this repo does not record which one. The two possible upstreams use different licences (Luke Smith's version is GPL-2.0, the original by torrinfail is ISC), so the stricter one is used here. If you know where it came from, please open an issue.
+- **Wallpaper pictures** (folder `wallpapers/`) belong to their original artists and are not covered by the licence above.
+- Programs this repo installs (rofi, picom, dunst, Thunar and others) keep their own licences.
