@@ -34,6 +34,12 @@ Super+B opens Brave Origin (command `brave-origin`). It is not in the normal pac
 
 To use another browser, change `"brave-origin"` in the `browsercmd` line of `dwm/config.h` to that browser's command, then rebuild (next section).
 
+## Screen lock
+
+The screen locks after 10 minutes without keys or mouse, and before the laptop sleeps (power menu, Sleep). A playing video in the browser stops the idle lock. Type your login password to unlock. To change the time, edit the `600` (seconds) in `.autostart.sh`, then press Super+Shift+R.
+
+Closing the lid: on laptops where it works, the system suspends and the screen locks. With an external monitor connected, the system ignores the lid on purpose. On the tested laptop the lid switch did not report anything, so the lid does not lock the screen there. The power menu (Super+Shift+S, Lock) always works.
+
 ## Change other keys or settings
 
 Keys are in `dwm/config.h`. After you edit it:

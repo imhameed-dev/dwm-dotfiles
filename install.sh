@@ -138,7 +138,7 @@ verify() {
     fi
     check "home folders were not created (Documents)" test -d "$HOME/Documents"
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
-             brightnessctl i3lock notify-send thunar; do
+             brightnessctl i3lock xss-lock xset notify-send thunar; do
         check "command not found: $c" command -v "$c"
     done
     check "ImageMagick (magick or convert) not found" have_imagemagick
@@ -149,7 +149,7 @@ verify() {
 }
 
 install_packages() {
-    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xfce4-terminal picom xdg-user-dirs gvfs)
+    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xss-lock xfce4-terminal picom xdg-user-dirs gvfs)
     if ((FIREWALL)); then
         common+=(ufw)
     fi
@@ -162,7 +162,7 @@ install_packages() {
             log "Arch: updating the package database and the system, then installing"
             run sudo pacman "${pm[@]}" -- "${common[@]}" \
                 base-devel pkgconf libx11 libxft libxinerama \
-                xorg-server xorg-xinit libinput \
+                xorg-server xorg-xinit libinput xorg-xset \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
                 networkmanager network-manager-applet libnotify xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono
             ;;
@@ -171,7 +171,7 @@ install_packages() {
             # The rest are tried together first, then one by one, so that one package
             # missing on an older release does not stop the others.
             local -a core=(build-essential pkg-config libx11-dev libxft-dev libxinerama-dev
-                           xorg xinit xserver-xorg-input-libinput network-manager
+                           xorg xinit x11-xserver-utils xserver-xorg-input-libinput network-manager
                            xdg-user-dirs libnotify-bin)
             local -a optional=() skipped=()
             local p

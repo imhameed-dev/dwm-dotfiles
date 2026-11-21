@@ -24,7 +24,7 @@ selected=$(printf "%s\n%s\n%s\n%s\n%s" "$lock" "$sleep_opt" "$logout" "$restart"
 
 case "$selected" in
     "$lock") i3lock ;;
-    "$sleep_opt") i3lock && systemctl suspend ;;
+    "$sleep_opt") if pgrep -x xss-lock >/dev/null; then systemctl suspend; else i3lock && systemctl suspend; fi ;;
     "$logout") confirm "Log out?" && pkill -x dwm ;;
     "$restart") confirm "Reboot now?" && systemctl reboot ;;
     "$shutdown") confirm "Shut down now?" && systemctl poweroff ;;

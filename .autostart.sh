@@ -29,3 +29,14 @@ start dunst
 start dwmblocks
 start nm-applet
 start picom -b
+
+# Auto-lock: after 10 minutes without keys or mouse the screen locks. xss-lock also
+# locks before the laptop sleeps (lid close, if systemd-logind suspends on lid close,
+# which is its default). To change the time, edit 600 (seconds).
+if command -v xset >/dev/null 2>&1; then
+    xset s on && xset s 600 600
+else
+    echo "not installed: xset (auto-lock timer not set)"
+    notify-send -u critical "Autostart" "xset is not installed" 2>/dev/null
+fi
+start xss-lock --transfer-sleep-lock -- i3lock --nofork --color=000000
