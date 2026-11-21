@@ -39,4 +39,11 @@ else
     echo "not installed: xset (auto-lock timer not set)"
     notify-send -u critical "Autostart" "xset is not installed" 2>/dev/null
 fi
-start xss-lock --transfer-sleep-lock -- i3lock --nofork --color=000000
+# The lock screen is ~/.local/bin/lock-screen (blurred wallpaper); plain i3lock if it is missing.
+locker="$HOME/.local/bin/lock-screen"
+if [ -x "$locker" ]; then
+    "$locker" --prepare &
+    start xss-lock --transfer-sleep-lock -- "$locker"
+else
+    start xss-lock --transfer-sleep-lock -- i3lock --nofork --color=000000
+fi

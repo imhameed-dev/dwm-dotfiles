@@ -36,7 +36,7 @@ To use another browser, change `"brave-origin"` in the `browsercmd` line of `dwm
 
 ## Screen lock
 
-The screen locks after 10 minutes without keys or mouse, and before the laptop sleeps (power menu, Sleep). A playing video in the browser stops the idle lock. Type your login password to unlock. To change the time, edit the `600` (seconds) in `.autostart.sh`, then press Super+Shift+R.
+The screen locks after 10 minutes without keys or mouse, and before the laptop sleeps (power menu, Sleep). A playing video in the browser stops the idle lock. The lock screen shows your wallpaper, blurred and darkened (the picture is made at login and after a wallpaper change; the first lock after a change may be plain black). Type your login password to unlock. To change the time, edit the `600` (seconds) in `.autostart.sh`, then press Super+Shift+R.
 
 Closing the lid: on laptops where it works, the system suspends and the screen locks. With an external monitor connected, the system ignores the lid on purpose. On the tested laptop the lid switch did not report anything, so the lid does not lock the screen there. The power menu (Super+Shift+S, Lock) always works.
 

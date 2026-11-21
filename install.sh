@@ -87,6 +87,7 @@ keep_personal() {
 collect() {
     local d
     PAIRS+=("$SRC/.autostart.sh" "$HOME/.autostart.sh")
+    PAIRS+=("$SRC/scripts/lock-screen.sh" "$HOME/.local/bin/lock-screen")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")
     PAIRS+=("$SRC/.bashrc" "$HOME/.bashrc")
@@ -138,7 +139,7 @@ verify() {
     fi
     check "home folders were not created (Documents)" test -d "$HOME/Documents"
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
-             brightnessctl i3lock xss-lock xset notify-send thunar; do
+             brightnessctl i3lock xss-lock xset xrandr notify-send thunar; do
         check "command not found: $c" command -v "$c"
     done
     check "ImageMagick (magick or convert) not found" have_imagemagick
@@ -162,7 +163,7 @@ install_packages() {
             log "Arch: updating the package database and the system, then installing"
             run sudo pacman "${pm[@]}" -- "${common[@]}" \
                 base-devel pkgconf libx11 libxft libxinerama \
-                xorg-server xorg-xinit libinput xorg-xset \
+                xorg-server xorg-xinit libinput xorg-xset xorg-xrandr \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
                 networkmanager network-manager-applet libnotify xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono
             ;;
