@@ -5,7 +5,8 @@
  * it only updates when sent `kill -RTMIN+<signal> $(pgrep dwmblocks)`
  * (see dwm/config.h's volume keybinds for an example). This file is the
  * upstream dwmblocks program with three small safety fixes; all customization lives in
- * config.h. See docs/DWM.md for how to add/edit/remove a block. */
+ * config.h. The comment at the top of config.h explains how to add, edit or
+ * remove a block. */
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>

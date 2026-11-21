@@ -27,8 +27,8 @@
  *       Search for: outergap (in updatebarpos)
  *   - restart() (Super+Shift+R) re-execs dwm; main() runs ~/.autostart.sh once.
  * The bar's actual text (volume/battery/date) comes from the separate
- * dwmblocks program, not from anything in this file. Full details, and how
- * to change any of the above, are in docs/DWM.md.
+ * dwmblocks program, not from anything in this file. How to change a key or
+ * a rule is explained in the comments at the top of dwm/config.h.
  */
 #include <errno.h>
 #include <locale.h>

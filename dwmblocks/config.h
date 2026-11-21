@@ -1,4 +1,10 @@
-/* Each row is one segment of the bar's status text, left to right in the
+/* HOW TO CHANGE THE BAR: add a segment by copying a row below, remove one by
+ * deleting its row, change how often it updates in the interval column.
+ * Then rebuild and restart:
+ *   make -C dwmblocks clean && make -C dwmblocks && sudo make -C dwmblocks install
+ *   pkill -x dwmblocks   (then press Super+Shift+R: dwm starts it again)
+ *
+ * Each row is one segment of the bar's status text, left to right in the
  * order listed below. interval=0 means "never runs on a timer, only on
  * its signal" (see dwmblocks.c's header comment). delim separates segments. */
 static char delim = '|';
