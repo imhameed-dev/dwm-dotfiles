@@ -140,7 +140,7 @@ verify() {
     fi
     check "home folders were not created (Documents)" test -d "$HOME/Documents"
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
-             brightnessctl i3lock xss-lock xset xrandr scrot notify-send thunar; do
+             brightnessctl i3lock xss-lock xset xrandr scrot pavucontrol playerctl notify-send thunar; do
         check "command not found: $c" command -v "$c"
     done
     check "ImageMagick (magick or convert) not found" have_imagemagick
@@ -151,9 +151,19 @@ verify() {
 }
 
 install_packages() {
-    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xss-lock scrot xfce4-terminal picom xdg-user-dirs gvfs)
+    local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xss-lock scrot pavucontrol playerctl xfce4-terminal picom xdg-user-dirs gvfs)
     if ((FIREWALL)); then
         common+=(ufw)
+    fi
+    # i3lock-color (AUR, optional, shows a clock on the lock screen) replaces i3lock.
+    # Asking pacman for i3lock then fails on the conflict, so leave i3lock out.
+    if [[ $DISTRO == arch ]] && pacman -Q i3lock-color >/dev/null 2>&1; then
+        local pkg
+        local -a kept=()
+        for pkg in "${common[@]}"; do
+            [[ $pkg == i3lock ]] || kept+=("$pkg")
+        done
+        common=("${kept[@]}")
     fi
     case $DISTRO in
         arch)

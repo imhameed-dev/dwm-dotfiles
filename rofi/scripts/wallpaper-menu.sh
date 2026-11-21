@@ -27,4 +27,10 @@ menu() {
 
 # -format i prints the index of the chosen row, so no name lookup is needed.
 i=$(menu | rofi -dmenu -i -theme "$theme" -format i) || exit 0
-[[ -n $i ]] && feh --bg-fill "${files[i]}"
+[[ -n $i ]] || exit 0
+feh --bg-fill "${files[i]}"
+
+# Build the lock screen picture now, so the next lock already shows this wallpaper.
+if [[ -x $HOME/.local/bin/lock-screen ]]; then
+    "$HOME/.local/bin/lock-screen" --prepare >/dev/null 2>&1 &
+fi

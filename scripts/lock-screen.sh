@@ -2,10 +2,12 @@
 # Lock the screen with i3lock over your wallpaper, blurred and darkened.
 #   lock-screen            lock now (stays in the foreground, as xss-lock needs)
 #   lock-screen --prepare  only build the picture, then exit
-# The picture is built once and kept in ~/.cache/lock-screen. If it is not ready
-# (first lock, new wallpaper, different screens) the screen locks at once on plain
-# black and the picture is built in the background for next time. Locking is never
-# delayed. Needs ImageMagick and xrandr.
+# With i3lock-color (AUR on Arch) the lock screen also shows the weekday, a big
+# day number, and the time and month, updated every second. With plain i3lock it
+# shows only the picture. If the picture is not ready (first lock, new wallpaper,
+# different screens) the screen locks at once on plain black and the picture is
+# built in the background for next time. Locking is never delayed.
+# Needs ImageMagick and xrandr.
 
 mode=$1
 cache="${XDG_CACHE_HOME:-$HOME/.cache}/lock-screen"
@@ -48,10 +50,35 @@ if [ "$mode" = "--prepare" ]; then
     exit 0
 fi
 
-if [ -n "$img" ]; then
-    if [ -f "$img" ]; then
-        exec i3lock --nofork -i "$img"
-    fi
-    make_picture &
+# Arguments for i3lock: the picture if it is ready, else plain black.
+if [ -n "$img" ] && [ -f "$img" ]; then
+    set -- --nofork -i "$img"
+else
+    [ -n "$img" ] && make_picture &
+    set -- --nofork --color=000000
 fi
-exec i3lock --nofork --color=000000
+
+# Only i3lock-color can draw the text. Every screen gets its own centered copy.
+# i3lock-color says "version 2.13.c.5" (the .c. marks it); plain i3lock says "version 2.16".
+if i3lock --version 2>&1 | grep -qE 'version [0-9.]*\.c\.|color'; then
+    set -- "$@" --clock \
+        --greeter-text="$(date +%A)" --greeter-size=22 --greeter-pos="x+w/2:y+h/2-95" \
+        --time-str="%d" --time-size=130 --time-pos="x+w/2:y+h/2+30" \
+        --date-str="%H:%M · %B" --date-size=28 --date-pos="x+w/2:y+h/2+85" \
+        --greeter-color=ffffffff --time-color=ffffffff --date-color=ffffffff \
+        --radius=45 --ring-width=6 --ind-pos="x+w/2:y+h-120" \
+        --inside-color=00000000 --insidever-color=00000000 --insidewrong-color=00000000 \
+        --ring-color=ffffffcc --ringver-color=ffffffff --ringwrong-color=ff6b6bff \
+        --line-color=00000000 --separator-color=00000000 \
+        --keyhl-color=ffffffff --bshl-color=ff6b6bff
+    start=$(date +%s)
+    i3lock "$@"
+    rc=$?
+    # i3lock-color quit at once with an error (a bad option): lock plain black instead.
+    if [ "$rc" -ne 0 ] && [ $(($(date +%s) - start)) -lt 2 ]; then
+        exec i3lock --nofork --color=000000
+    fi
+    exit "$rc"
+fi
+
+exec i3lock "$@"
