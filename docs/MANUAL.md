@@ -44,6 +44,10 @@ Optional clock on the lock screen: the package `i3lock-color` adds the weekday, 
 
 Closing the lid: on laptops where it works, the system suspends and the screen locks. With an external monitor connected, the system ignores the lid on purpose. On the tested laptop the lid switch did not report anything, so the lid does not lock the screen there. The power menu (Super+Shift+S, Lock) always works.
 
+## USB drives
+
+Nothing extra is installed for this. Plug in the drive, press Super+E (Thunar), and click the drive in the left sidebar: it mounts and opens. To remove it, use the eject icon next to the drive, or right-click it and choose Unmount, and wait until it disappears before you unplug it. If the drive stays mounted, close any window that is open inside it, then try `udisksctl unmount -b /dev/sdb1` (use the name `lsblk` shows for your drive).
+
 ## Change other keys or settings
 
 Keys are in `dwm/config.h`. After you edit it:
