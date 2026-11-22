@@ -50,7 +50,7 @@ The bar shows the battery as an icon and `85%` (a bolt icon while charging) and 
 
 ## Second monitor
 
-A monitor that is plugged in before you start dwm is used at once, to the right of the laptop screen. If you plug in or unplug a monitor while dwm is running, press Super+Shift+M: it turns on every connected screen side by side and turns off the ones that are gone. Super+, and Super+. move between monitors, and Super+Shift+, and Super+Shift+. send a window to the other monitor.
+A monitor that is plugged in before you start dwm is used at once, to the right of the laptop screen. If you plug in or unplug a monitor while dwm is running, press Super+Shift+M: it turns on every connected screen side by side and turns off the ones that are gone. Super+, and Super+. move between monitors, and Super+Shift+, and Super+Shift+. send a window to the other monitor. If your second monitor stands on the left, run this once: `mkdir -p ~/.config/dwm-dotfiles && echo left > ~/.config/dwm-dotfiles/monitor-side`. Then Super+Shift+M puts it on the left. To go back, delete that file.
 
 ## Keyboard layout and text size
 
@@ -72,7 +72,7 @@ Then press Super+Shift+R. For other settings (`rofi/`, `dunst/`), edit the file 
 
 ## If something is wrong
 
-- Run `./install.sh --check`. Lines that start with `FAIL` show what is missing. Lines that start with `WARN` are only notes (for example your own `.bashrc` is kept). Run `./install.sh` again to fix it.
+- Run `./install.sh --check`. Lines that start with `FAIL` show what is missing. Lines that start with `WARN` are only notes: your own `.bashrc` is kept, or a helper such as `scrot` or `playerctl` is missing, so only that one feature is off. Run `./install.sh` again to fix it.
 - No bar or wallpaper: dwm was already running during the install. Type `pkill -x dwm`, then `startx`. Errors are in `~/.autostart.log`.
 - To see what the installer would do without changing anything: `./install.sh --dry-run`.
 - The firewall is optional. Install with `./install.sh --firewall` to block incoming connections (SSH is allowed first if an SSH server is installed). See it with `sudo ufw status`.

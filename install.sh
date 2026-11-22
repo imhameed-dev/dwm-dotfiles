@@ -16,6 +16,7 @@ UNINSTALL=0
 DOTFILES=0
 PASS=0
 FAIL=0
+WARN=0
 PAIRS=()   # alternating: file in this repo, place it is installed to
 REMOVED=()  # files taken away by --uninstall
 
@@ -124,6 +125,18 @@ check() {
     fi
 }
 
+# optional DESCRIPTION COMMAND...: like check, but a miss is only a warning (the desktop still works).
+optional() {
+    local desc=$1
+    shift
+    if "$@" >/dev/null 2>&1; then
+        PASS=$((PASS + 1))
+    else
+        WARN=$((WARN + 1))
+        printf '  WARN: %s\n' "$desc"
+    fi
+}
+
 have_imagemagick() { command -v magick || command -v convert; }
 verify() {
     local i src dest c
@@ -156,13 +169,21 @@ verify() {
     fi
     check "home folders were not created (Documents)" test -d "$HOME/Documents"
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
-             brightnessctl i3lock xss-lock xset xrandr setxkbmap xrdb scrot pavucontrol playerctl notify-send thunar; do
+             xset xrandr setxkbmap xrdb notify-send; do
         check "command not found: $c" command -v "$c"
     done
-    check "ImageMagick (magick or convert) not found" have_imagemagick
+    # Helpers for single features: a miss only turns that feature off.
+    optional "brightnessctl not found (brightness keys do nothing)" command -v brightnessctl
+    optional "i3lock not found (no screen lock)" command -v i3lock
+    optional "xss-lock not found (no automatic lock)" command -v xss-lock
+    optional "scrot not found (no screenshots)" command -v scrot
+    optional "pavucontrol not found (Super+V does nothing)" command -v pavucontrol
+    optional "playerctl not found (media keys do nothing)" command -v playerctl
+    optional "thunar not found (no file manager)" command -v thunar
+    optional "ImageMagick (magick or convert) not found (lock screen stays plain black)" have_imagemagick
     # Brave Origin is not in the normal package lists, so a missing one is only a warning.
     command -v brave-origin >/dev/null 2>&1 || printf '  WARN: brave-origin not found (Super+B needs it; see docs/MANUAL.md)\n'
-    printf '==> Checks: %d passed, %d failed\n' "$PASS" "$FAIL"
+    printf '==> Checks: %d passed, %d warnings, %d failed\n' "$PASS" "$WARN" "$FAIL"
     ((FAIL == 0))
 }
 
