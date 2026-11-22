@@ -80,3 +80,7 @@ Then press Super+Shift+R. For other settings (`rofi/`, `dunst/`), edit the file 
 ## Uninstall
 
 Run `./install.sh --dry-run --uninstall` first: it only shows what would be removed. Then run `./install.sh --uninstall`. It removes only files that are still exact copies of the repo, so a file you edited is kept. It also offers to put back the files you had before the first install (from the backup folder `~/.local/state/dwm-dotfiles/backups`). Programs such as rofi, picom and dunst stay installed; remove them with your package manager if you want. Log out of dwm afterwards.
+
+## Network
+
+The installer sets up NetworkManager and the Wi-Fi icon in the bar. If your computer already uses another network tool (for example a server with netplan or systemd-networkd), the installer sees that, leaves your network exactly as it is, and shows no Wi-Fi icon.

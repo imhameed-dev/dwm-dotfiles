@@ -27,7 +27,8 @@ start() {
 # dunst and nm-applet read ~/.config/<name>/ by default.
 start dunst
 start dwmblocks
-start nm-applet
+# nm-applet only exists when NetworkManager was installed; without it there is nothing to start.
+command -v nm-applet >/dev/null 2>&1 && start nm-applet
 start picom -b
 
 # Auto-lock: after 10 minutes without keys or mouse the screen locks. xss-lock also
