@@ -44,6 +44,10 @@ Optional clock on the lock screen: the package `i3lock-color` adds the weekday, 
 
 Closing the lid: on laptops where it works, the system suspends and the screen locks. With an external monitor connected, the system ignores the lid on purpose. On the tested laptop the lid switch did not report anything, so the lid does not lock the screen there. The power menu (Super+Shift+S, Lock) always works.
 
+## Second monitor
+
+A monitor that is plugged in before you start dwm is used at once, to the right of the laptop screen. If you plug in or unplug a monitor while dwm is running, press Super+Shift+M: it turns on every connected screen side by side and turns off the ones that are gone. Super+, and Super+. move between monitors, and Super+Shift+, and Super+Shift+. send a window to the other monitor.
+
 ## Keyboard layout and text size
 
 The keyboard layout is one word at the top of `~/.xinitrc`: change `KBD_LAYOUT=us` (for example to `gb`, `de` or `in`), then log out and in. To try a layout at once, run `setxkbmap de`. The size of text and icons is one number in `~/.Xresources`: change `Xft.dpi: 96` (try 110 or 120 if text is too small), then log out and in. After editing, `./install.sh` keeps your changed files unless you use `--dotfiles`.

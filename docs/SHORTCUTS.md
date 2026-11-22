@@ -25,6 +25,7 @@ Super is the Windows key. Every shortcut is defined in `dwm/config.h`. To change
 | Super+Shift+Space | Make the window float (free to move and resize), or tile it again |
 | Super+, and Super+. | Focus the previous or next monitor (only matters with two or more monitors) |
 | Super+Shift+, and Super+Shift+. | Send the window to the previous or next monitor |
+| Super+Shift+M | Set up all screens: turns on every connected monitor side by side (laptop screen first) and turns off unplugged ones. Press it after plugging in or unplugging a monitor |
 
 ## Layout
 

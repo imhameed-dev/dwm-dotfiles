@@ -89,6 +89,7 @@ collect() {
     PAIRS+=("$SRC/.autostart.sh" "$HOME/.autostart.sh")
     PAIRS+=("$SRC/scripts/lock-screen.sh" "$HOME/.local/bin/lock-screen")
     PAIRS+=("$SRC/scripts/screenshot.sh" "$HOME/.local/bin/screenshot")
+    PAIRS+=("$SRC/scripts/monitors.sh" "$HOME/.local/bin/monitors")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
     PAIRS+=("$SRC/.Xresources" "$HOME/.Xresources")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")

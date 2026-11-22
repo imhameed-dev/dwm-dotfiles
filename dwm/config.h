@@ -130,6 +130,7 @@ static const Key keys[] = {
 { MODKEY,             XK_period,                  focusmon,       {.i = +1 } },                  /* Super+.            next monitor */
 { MODKEY|ShiftMask,   XK_comma,                   tagmon,         {.i = -1 } },                  /* Super+Shift+,      move window to previous monitor */
 { MODKEY|ShiftMask,   XK_period,                  tagmon,         {.i = +1 } },                  /* Super+Shift+.      move window to next monitor */
+{ MODKEY|ShiftMask,   XK_m,                       spawn,          SHCMD("sh $HOME/.local/bin/monitors") },                 /* Super+Shift+M      set up all screens (after plugging in or unplugging a monitor) */
 
 /* ---------- Layout ---------- */
 { MODKEY,             XK_i,                       incnmaster,     {.i = +1 } },                  /* Super+I            more windows in the main area */

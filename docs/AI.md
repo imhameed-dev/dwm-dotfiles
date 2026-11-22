@@ -73,6 +73,7 @@ Boot path: log in on tty1, `.bash_profile` runs `startx`, `.xinitrc` starts dwm,
 | --- | --- | --- |
 | `dwm/` | `/usr/local/bin/dwm` | dwm 6.5 plus local changes; `dwm/config.h` is the only configuration |
 | `dwmblocks/` | `/usr/local/bin/dwmblocks` | status bar blocks (volume, battery, date and time) |
+| `scripts/monitors.sh` | `~/.local/bin/monitors` | Super+Shift+M: turns on all connected screens side by side (laptop first), turns off unplugged ones; no background program |
 | `.xinitrc`, `.autostart.sh`, `.bash_profile`, `.bashrc`, `.Xresources` | `~` | startup files, the shell prompt, keyboard layout (`KBD_LAYOUT` in `.xinitrc`) and text size (`Xft.dpi` in `.Xresources`) |
 | `rofi/`, `dunst/`, `picom/` | `~/.config/` | launcher, notifications, compositor |
 | `xfce4-terminal/xfce4-terminal.xml` | `~/.config/xfce4/xfconf/xfce-perchannel-xml/` | terminal colours (Gruvbox Dark Hard) and font |
