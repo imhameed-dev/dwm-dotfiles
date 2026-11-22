@@ -45,7 +45,7 @@ Rules:
 - Run as a normal user, never as root. The script asks for the `sudo` password itself.
 - Never copy files by hand. Installing a program does not install its settings. If something is missing, run `./install.sh` again.
 - If a check fails, ask the user to send the lines that start with `FAIL`.
-- Options: `--dry-run` shows what would happen, `--yes` skips every confirmation question (on Arch it also passes `--noconfirm` to pacman), `--check` only verifies, `--firewall` also sets up ufw, `--dotfiles` replaces the user's own `~/.bashrc`, `~/.bash_profile`, `~/.xinitrc` and `~/.Xresources` (without it, such files are kept when they exist and differ from the repo).
+- Options: `--dry-run` shows what would happen, `--yes` skips every confirmation question (on Arch it also passes `--noconfirm` to pacman), `--check` only verifies, `--firewall` also sets up ufw, `--power` also installs and enables tlp (laptop power saving; off by default), `--dotfiles` replaces the user's own `~/.bashrc`, `~/.bash_profile`, `~/.xinitrc` and `~/.Xresources` (without it, such files are kept when they exist and differ from the repo).
 
 ### What the installer does
 
@@ -73,6 +73,7 @@ Boot path: log in on tty1, `.bash_profile` runs `startx`, `.xinitrc` starts dwm,
 | --- | --- | --- |
 | `dwm/` | `/usr/local/bin/dwm` | dwm 6.5 plus local changes; `dwm/config.h` is the only configuration |
 | `dwmblocks/` | `/usr/local/bin/dwmblocks` | status bar blocks (volume, battery, date and time) |
+| `scripts/battery-alert.sh` | `~/.local/bin/battery-alert` | run once a minute by the bar: prints the battery text, shows a notice at 15% and 5%; no background program |
 | `scripts/monitors.sh` | `~/.local/bin/monitors` | Super+Shift+M: turns on all connected screens side by side (laptop first), turns off unplugged ones; no background program |
 | `.xinitrc`, `.autostart.sh`, `.bash_profile`, `.bashrc`, `.Xresources` | `~` | startup files, the shell prompt, keyboard layout (`KBD_LAYOUT` in `.xinitrc`) and text size (`Xft.dpi` in `.Xresources`) |
 | `rofi/`, `dunst/`, `picom/` | `~/.config/` | launcher, notifications, compositor |

@@ -44,6 +44,10 @@ Optional clock on the lock screen: the package `i3lock-color` adds the weekday, 
 
 Closing the lid: on laptops where it works, the system suspends and the screen locks. With an external monitor connected, the system ignores the lid on purpose. On the tested laptop the lid switch did not report anything, so the lid does not lock the screen there. The power menu (Super+Shift+S, Lock) always works.
 
+## Battery
+
+The bar shows the battery as `Bat 85%` (with a `+` while charging) and nothing on a PC. A notice appears once at 15% and once at 5% while the battery drains. For power saving, run `./install.sh --power`: it installs and turns on `tlp` (if you use `power-profiles-daemon`, remove it first). Without `--power` no power settings are touched.
+
 ## Second monitor
 
 A monitor that is plugged in before you start dwm is used at once, to the right of the laptop screen. If you plug in or unplug a monitor while dwm is running, press Super+Shift+M: it turns on every connected screen side by side and turns off the ones that are gone. Super+, and Super+. move between monitors, and Super+Shift+, and Super+Shift+. send a window to the other monitor.

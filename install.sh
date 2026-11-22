@@ -10,6 +10,7 @@ DRY=0
 YES=0
 CHECK=0
 FIREWALL=0
+POWER=0
 DOTFILES=0
 PASS=0
 FAIL=0
@@ -17,7 +18,7 @@ PAIRS=()   # alternating: file in this repo, place it is installed to
 
 usage() {
     cat <<'USAGE'
-Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [--dotfiles] [-h|--help]
+Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [--power] [--dotfiles] [-h|--help]
 
   --dry-run   print what would be done without changing anything
   --yes       do not ask for confirmation
@@ -25,6 +26,8 @@ Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [--dotfiles] [-h|
   --firewall  also install and turn on the ufw firewall (incoming connections
               blocked; SSH is allowed first if an SSH server is installed).
               Without this option the firewall is not touched.
+  --power     also install and turn on tlp (laptop power saving). Without this
+              option power settings are not touched.
   --dotfiles  replace your own ~/.bashrc, ~/.bash_profile, ~/.xinitrc and ~/.Xresources with the
               ones from this repo (the old files are backed up first).
               Without this option files you already have and changed are kept.
@@ -90,6 +93,7 @@ collect() {
     PAIRS+=("$SRC/scripts/lock-screen.sh" "$HOME/.local/bin/lock-screen")
     PAIRS+=("$SRC/scripts/screenshot.sh" "$HOME/.local/bin/screenshot")
     PAIRS+=("$SRC/scripts/monitors.sh" "$HOME/.local/bin/monitors")
+    PAIRS+=("$SRC/scripts/battery-alert.sh" "$HOME/.local/bin/battery-alert")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
     PAIRS+=("$SRC/.Xresources" "$HOME/.Xresources")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")
@@ -140,6 +144,9 @@ verify() {
     if ((FIREWALL)); then
         check "firewall (ufw) is not running" systemctl is-active --quiet ufw
     fi
+    if ((POWER)); then
+        check "tlp is not running" systemctl is-active --quiet tlp
+    fi
     check "home folders were not created (Documents)" test -d "$HOME/Documents"
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
              brightnessctl i3lock xss-lock xset xrandr setxkbmap xrdb scrot pavucontrol playerctl notify-send thunar; do
@@ -156,6 +163,9 @@ install_packages() {
     local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xss-lock scrot pavucontrol playerctl xfce4-terminal picom xdg-user-dirs gvfs)
     if ((FIREWALL)); then
         common+=(ufw)
+    fi
+    if ((POWER)); then
+        common+=(tlp)
     fi
     # i3lock-color (AUR, optional, shows a clock on the lock screen) replaces i3lock.
     # Asking pacman for i3lock then fails on the conflict, so leave i3lock out.
@@ -215,6 +225,7 @@ main() {
             --yes) YES=1 ;;
             --check) CHECK=1 ;;
             --firewall) FIREWALL=1 ;;
+            --power) POWER=1 ;;
             --dotfiles) DOTFILES=1 ;;
             -h|--help) usage; exit 0 ;;
             *) die "unknown option: $1 (see --help)" ;;
@@ -261,6 +272,13 @@ main() {
         run sudo systemctl enable --now ufw
     else
         log "Firewall not changed (add --firewall to turn on ufw)"
+    fi
+
+    if ((POWER)); then
+        log "Turning on tlp (laptop power saving). If you use power-profiles-daemon, remove it: the two do not work together"
+        run sudo systemctl enable --now tlp || log "could not enable tlp; enable it yourself"
+    else
+        log "Power settings not changed (add --power to install and turn on tlp)"
     fi
 
     log "Building and installing dwm"
