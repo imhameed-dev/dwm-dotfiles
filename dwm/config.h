@@ -34,6 +34,9 @@ static const Rule rules[] = {
 */
 /* class instance title tags mask isfloating monitor */
 { "Gimp", NULL, NULL, 0, 1, -1 },
+/* Small tool windows float. Matched on the instance name (second WM_CLASS string). Dialog windows float by themselves (dwm does that for _NET_WM_WINDOW_TYPE_DIALOG). */
+{ NULL, "pavucontrol", NULL, 0, 1, -1 },
+{ NULL, "nm-connection-editor", NULL, 0, 1, -1 },
 };
 
 /* ======================= LAYOUTS ======================= */
@@ -79,6 +82,7 @@ static const char *termcmd[]          = { "xfce4-terminal", NULL };
 static const char *roficmd[]          = { "rofi", "-show", "drun", NULL };
 static const char *browsercmd[]       = { "brave-origin", NULL };   /* change this to use another browser */
 static const char *thunarcmd[]        = { "thunar", NULL };
+static const char *audiopickercmd[]   = { "pavucontrol", NULL };
 static const char *powermenucmd[]     = { "/bin/sh", "-c", "bash $HOME/.config/rofi/scripts/powermenu.sh", NULL };
 static const char *autostartcmd[]     = { "/bin/sh", "-c", "sh $HOME/.autostart.sh", NULL };
 static const char *wallpapermenucmd[] = { "/bin/sh", "-c", "bash $HOME/.config/rofi/scripts/wallpaper-menu.sh", NULL };
@@ -94,6 +98,7 @@ static const Key keys[] = {
 { MODKEY,             XK_w,                       spawn,          {.v = wallpapermenucmd } },    /* Super+W            wallpaper menu */
 { MODKEY,             XK_b,                       spawn,          {.v = browsercmd } },          /* Super+B            browser (Brave Origin) */
 { MODKEY,             XK_e,                       spawn,          {.v = thunarcmd } },           /* Super+E            files (Thunar) */
+{ MODKEY,             XK_v,                       spawn,          {.v = audiopickercmd } },      /* Super+V            volume and output picker (pavucontrol) */
 { MODKEY|ShiftMask,   XK_s,                       spawn,          {.v = powermenucmd } },        /* Super+Shift+S      power menu */
 
 /* ---------- Volume and media keys (the bar refreshes through pkill -RTMIN+10 dwmblocks) ---------- */
@@ -104,6 +109,11 @@ static const Key keys[] = {
 /* ---------- Screenshots (saved in ~/Pictures/screenshots) ---------- */
 { 0,                  XK_Print,                   spawn,          SHCMD("sh $HOME/.local/bin/screenshot full") },          /* Print              screenshot of all screens */
 { ShiftMask,          XK_Print,                   spawn,          SHCMD("sh $HOME/.local/bin/screenshot area") },          /* Shift+Print        screenshot of a box you drag */
+
+/* ---------- Media keys (work with any player that supports MPRIS, such as Brave or mpv) ---------- */
+{ 0,                  XF86XK_AudioPlay,           spawn,          SHCMD("playerctl play-pause") },                         /* play or pause */
+{ 0,                  XF86XK_AudioNext,           spawn,          SHCMD("playerctl next") },                               /* next track */
+{ 0,                  XF86XK_AudioPrev,           spawn,          SHCMD("playerctl previous") },                           /* previous track */
 
 /* ---------- Brightness ---------- */
 { 0,                  XF86XK_MonBrightnessUp,     spawn,          SHCMD("brightnessctl set +10%") },                       /* brightness up */

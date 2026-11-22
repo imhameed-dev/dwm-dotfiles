@@ -10,6 +10,7 @@ Super is the Windows key. Every shortcut is defined in `dwm/config.h`. To change
 | Super+Space | Open the app launcher (Rofi). Type to search, press Enter to start |
 | Super+B | Open the browser (Brave Origin) |
 | Super+E | Open the file manager (Thunar) |
+| Super+V | Open the volume and sound output picker (pavucontrol) |
 | Super+W | Open the wallpaper menu. Pick a picture to change the wallpaper |
 | Super+Shift+S | Open the power menu: Lock, Sleep, Log out, Reboot, Shut down |
 
@@ -65,6 +66,7 @@ There is no key that quits dwm. To log out, use the power menu (Super+Shift+S).
 | --- | --- |
 | Volume up, volume down | Change the volume by 5% (the bar updates at once) |
 | Mute | Turn the sound off or on |
+| Play/pause, next, previous | Control the playing music or video (`playerctl`; works with Brave and other players that support it) |
 | Brightness up, brightness down | Change the screen brightness by 10%. It never goes fully black |
 | Print | Screenshot of all screens, saved in `~/Pictures/screenshots` (a notice shows the file name) |
 | Shift+Print | Screenshot of a box you drag with the mouse (Esc cancels) |
