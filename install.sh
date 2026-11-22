@@ -231,12 +231,18 @@ install_packages() {
                            xorg xinit x11-xserver-utils xserver-xorg-input-libinput network-manager
                            xdg-user-dirs libnotify-bin)
             local -a optional=() skipped=()
-            local p
+            local p nerd_note=0
             for p in "${common[@]}" pipewire pipewire-audio pipewire-pulse wireplumber \
                      pulseaudio-utils network-manager-gnome fonts-jetbrains-mono; do
                 [[ $p == xdg-user-dirs ]] || optional+=("$p")
             done
             run sudo apt-get update
+            # Debian stable has no Nerd symbols font package yet; use it where it exists.
+            if apt-cache show fonts-nerd-symbols >/dev/null 2>&1; then
+                optional+=(fonts-nerd-symbols)
+            else
+                nerd_note=1
+            fi
             run sudo apt-get install -y "${core[@]}"
             if ! run sudo apt-get install -y "${optional[@]}"; then
                 log "Some optional packages could not be installed together; trying one by one"
@@ -246,6 +252,9 @@ install_packages() {
             fi
             if ((${#skipped[@]})); then
                 log "WARNING: not installed (missing on this release): ${skipped[*]}"
+            fi
+            if ((nerd_note)); then
+                log "NOTE: this release has no Nerd symbols font package, so the bar and the shell prompt show plain text. For icons, download Symbols Nerd Font Mono from https://www.nerdfonts.com/font-downloads into ~/.local/share/fonts and run: fc-cache -f"
             fi
             ;;
     esac
