@@ -76,3 +76,7 @@ Then press Super+Shift+R. For other settings (`rofi/`, `dunst/`), edit the file 
 - No bar or wallpaper: dwm was already running during the install. Type `pkill -x dwm`, then `startx`. Errors are in `~/.autostart.log`.
 - To see what the installer would do without changing anything: `./install.sh --dry-run`.
 - The firewall is optional. Install with `./install.sh --firewall` to block incoming connections (SSH is allowed first if an SSH server is installed). See it with `sudo ufw status`.
+
+## Uninstall
+
+Run `./install.sh --dry-run --uninstall` first: it only shows what would be removed. Then run `./install.sh --uninstall`. It removes only files that are still exact copies of the repo, so a file you edited is kept. It also offers to put back the files you had before the first install (from the backup folder `~/.local/state/dwm-dotfiles/backups`). Programs such as rofi, picom and dunst stay installed; remove them with your package manager if you want. Log out of dwm afterwards.

@@ -45,7 +45,7 @@ Rules:
 - Run as a normal user, never as root. The script asks for the `sudo` password itself.
 - Never copy files by hand. Installing a program does not install its settings. If something is missing, run `./install.sh` again.
 - If a check fails, ask the user to send the lines that start with `FAIL`.
-- Options: `--dry-run` shows what would happen, `--yes` skips every confirmation question (on Arch it also passes `--noconfirm` to pacman), `--check` only verifies, `--firewall` also sets up ufw, `--power` also installs and enables tlp (laptop power saving; off by default), `--dotfiles` replaces the user's own `~/.bashrc`, `~/.bash_profile`, `~/.xinitrc` and `~/.Xresources` (without it, such files are kept when they exist and differ from the repo).
+- Options: `--dry-run` shows what would happen, `--yes` skips every confirmation question (on Arch it also passes `--noconfirm` to pacman), `--check` only verifies, `--firewall` also sets up ufw, `--power` also installs and enables tlp (laptop power saving; off by default), `--uninstall` removes the installed files that are still exact copies of the repo (files the user edited are kept), runs `make uninstall` for dwm and dwmblocks, and offers to restore the oldest backup of each removed file; packages are not removed, `--dry-run --uninstall` only shows it, `--dotfiles` replaces the user's own `~/.bashrc`, `~/.bash_profile`, `~/.xinitrc` and `~/.Xresources` (without it, such files are kept when they exist and differ from the repo).
 
 ### What the installer does
 

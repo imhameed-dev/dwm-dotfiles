@@ -5,20 +5,23 @@ set -Eeuo pipefail
 
 SRC="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 CONF="${XDG_CONFIG_HOME:-$HOME/.config}"
-BACKUP="${XDG_STATE_HOME:-$HOME/.local/state}/dwm-dotfiles/backups/$(date +%Y%m%d-%H%M%S)"
+BACKUP_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/dwm-dotfiles/backups"
+BACKUP="$BACKUP_ROOT/$(date +%Y%m%d-%H%M%S)"
 DRY=0
 YES=0
 CHECK=0
 FIREWALL=0
 POWER=0
+UNINSTALL=0
 DOTFILES=0
 PASS=0
 FAIL=0
 PAIRS=()   # alternating: file in this repo, place it is installed to
+REMOVED=()  # files taken away by --uninstall
 
 usage() {
     cat <<'USAGE'
-Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [--power] [--dotfiles] [-h|--help]
+Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [--power] [--dotfiles] [--uninstall] [-h|--help]
 
   --dry-run   print what would be done without changing anything
   --yes       do not ask for confirmation
@@ -28,6 +31,9 @@ Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [--power] [--dotf
               Without this option the firewall is not touched.
   --power     also install and turn on tlp (laptop power saving). Without this
               option power settings are not touched.
+  --uninstall remove what this installer put in place (only files that are still
+              exact copies of the repo's files; ones you changed are kept), then
+              offer to restore your old files from the backups. Packages stay installed.
   --dotfiles  replace your own ~/.bashrc, ~/.bash_profile, ~/.xinitrc and ~/.Xresources with the
               ones from this repo (the old files are backed up first).
               Without this option files you already have and changed are kept.
@@ -218,6 +224,83 @@ install_packages() {
     esac
 }
 
+# ask QUESTION: true if the answer is yes (--yes answers yes to everything).
+ask() {
+    local answer
+    ((YES)) && return 0
+    read -r -p "$1 [y/N] " answer
+    [[ $answer =~ ^[Yy] ]]
+}
+
+# remove_ours DEST SRC [sudo]: remove DEST only if it is an exact copy of SRC.
+remove_ours() {
+    local dest=$1 src=$2
+    local -a as=()
+    [[ ${3:-} == sudo ]] && as=(sudo)
+    if [[ ! -e $dest && ! -L $dest ]]; then
+        return 0
+    fi
+    if cmp -s "$src" "$dest"; then
+        run "${as[@]}" rm -f -- "$dest"
+        REMOVED+=("$dest")
+    else
+        printf '  Kept (it is different from the repo, so you changed it): %s\n' "$dest"
+    fi
+}
+
+# oldest_backup DEST: print the oldest saved copy of DEST (the file you had before the
+# first install), or fail when there is none.
+oldest_backup() {
+    local name=${1//\//_} d
+    for d in "$BACKUP_ROOT"/*/; do
+        if [[ -e ${d}$name || -L ${d}$name ]]; then
+            printf '%s' "${d}$name"
+            return 0
+        fi
+    done
+    return 1
+}
+
+# remove_empty_dirs DEST: remove the folders DEST was in, as far as they are now empty.
+remove_empty_dirs() {
+    local d
+    d=$(dirname "$1")
+    while [[ $d == "$HOME"/* && $d != "$CONF" && $d != "$HOME/Pictures" && $d != "$HOME/.local" && $d != "$HOME/.local/bin" ]]; do
+        rmdir "$d" 2>/dev/null || break
+        d=$(dirname "$d")
+    done
+}
+
+uninstall() {
+    local i dest backup
+    local -a as
+    log "Uninstall: removing only files that are still exact copies of this repo's files"
+    if ((!YES && !DRY)); then
+        ask "Remove the dwm-dotfiles files from this computer?" || exit 1
+    fi
+    for ((i = 0; i < ${#PAIRS[@]}; i += 2)); do
+        remove_ours "${PAIRS[i + 1]}" "${PAIRS[i]}"
+    done
+    remove_ours /etc/X11/xorg.conf.d/40-libinput.conf "$SRC/X11/40-libinput.conf" sudo
+    remove_ours /usr/share/xsessions/dwm.desktop "$SRC/X11/dwm.desktop" sudo
+    if [[ -e /usr/local/bin/dwm || -e /usr/local/bin/dwmblocks ]]; then
+        run sudo make -C "$SRC/dwm" uninstall
+        run sudo make -C "$SRC/dwmblocks" uninstall
+    fi
+
+    for dest in "${REMOVED[@]}"; do
+        ((DRY)) || remove_empty_dirs "$dest"
+        backup=$(oldest_backup "$dest") || continue
+        if ((DRY)) || ask "Restore your old $dest from the backup?"; then
+            as=()
+            [[ $dest == "$HOME"/* ]] || as=(sudo)
+            run "${as[@]}" mkdir -p -- "$(dirname "$dest")"
+            run "${as[@]}" cp -a -- "$backup" "$dest"
+        fi
+    done
+    log "Done. ${#REMOVED[@]} file(s) removed. Packages (rofi, picom, dunst and the others) stay installed: remove them with your package manager if you want. Log out of dwm to finish."
+}
+
 main() {
     while (($#)); do
         case $1 in
@@ -226,6 +309,7 @@ main() {
             --check) CHECK=1 ;;
             --firewall) FIREWALL=1 ;;
             --power) POWER=1 ;;
+            --uninstall) UNINSTALL=1 ;;
             --dotfiles) DOTFILES=1 ;;
             -h|--help) usage; exit 0 ;;
             *) die "unknown option: $1 (see --help)" ;;
@@ -235,6 +319,10 @@ main() {
 
     ((EUID != 0)) || die "run this as a normal user, not root"
     collect
+    if ((UNINSTALL)); then
+        uninstall
+        exit
+    fi
     if ((CHECK)); then
         verify
         exit
