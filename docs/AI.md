@@ -45,7 +45,7 @@ Rules:
 - Run as a normal user, never as root. The script asks for the `sudo` password itself.
 - Never copy files by hand. Installing a program does not install its settings. If something is missing, run `./install.sh` again.
 - If a check fails, ask the user to send the lines that start with `FAIL`.
-- Options: `--dry-run` shows what would happen, `--yes` skips every confirmation question (on Arch it also passes `--noconfirm` to pacman), `--check` only verifies, `--firewall` also sets up ufw, `--dotfiles` replaces the user's own `~/.bashrc`, `~/.bash_profile` and `~/.xinitrc` (without it, such files are kept when they exist and differ from the repo).
+- Options: `--dry-run` shows what would happen, `--yes` skips every confirmation question (on Arch it also passes `--noconfirm` to pacman), `--check` only verifies, `--firewall` also sets up ufw, `--dotfiles` replaces the user's own `~/.bashrc`, `~/.bash_profile`, `~/.xinitrc` and `~/.Xresources` (without it, such files are kept when they exist and differ from the repo).
 
 ### What the installer does
 
@@ -53,7 +53,7 @@ Rules:
 2. Installs packages (Arch: `pacman -Syu`, a full upgrade first, because Arch does not support partial upgrades; Debian: the core packages first, then the optional ones together, then one by one if needed, and it prints which ones were skipped): Xorg, build tools, Rofi, Dunst, Picom, Feh, Thunar with gvfs, xfce4-terminal, NetworkManager with tray applet, PipeWire (with pipewire-pulse and WirePlumber), brightnessctl, i3lock and xss-lock (auto-lock after 10 minutes and before sleep; the lock picture is made by `scripts/lock-screen.sh`, installed as `~/.local/bin/lock-screen`), xrandr, pavucontrol (Super+V picker) and playerctl (media keys), scrot (screenshots on Print and Shift+Print; script `scripts/screenshot.sh`, installed as `~/.local/bin/screenshot`), ImageMagick, xdg-user-dirs, xdg-utils with the GTK portal (Arch list), JetBrains Mono and the icons-only symbols font (Arch list).
 3. Enables NetworkManager, and creates the home folders. The firewall is not touched unless the user asks for `--firewall`: then it installs `ufw`, allows SSH first if an SSH server is installed, and turns it on (incoming blocked, outgoing allowed).
 4. Builds and installs dwm and dwmblocks from the source in this repo. It never downloads another dwm.
-5. Copies the settings. The user's own `~/.bashrc`, `~/.bash_profile` and `~/.xinitrc` are kept if they exist and differ (unless `--dotfiles`). Any other different existing file is first moved to `~/.local/state/dwm-dotfiles/backups/<timestamp>/`.
+5. Copies the settings. The user's own `~/.bashrc`, `~/.bash_profile`, `~/.xinitrc` and `~/.Xresources` are kept if they exist and differ (unless `--dotfiles`). Any other different existing file is first moved to `~/.local/state/dwm-dotfiles/backups/<timestamp>/`.
 6. Adds a `dwm` entry to `/usr/share/xsessions/` so login screens (GDM, LightDM, SDDM) list it. It is a copy of `X11/dwm.desktop`, not a link.
 7. Verifies everything and prints `Checks: N passed, N failed`.
 
@@ -73,7 +73,7 @@ Boot path: log in on tty1, `.bash_profile` runs `startx`, `.xinitrc` starts dwm,
 | --- | --- | --- |
 | `dwm/` | `/usr/local/bin/dwm` | dwm 6.5 plus local changes; `dwm/config.h` is the only configuration |
 | `dwmblocks/` | `/usr/local/bin/dwmblocks` | status bar blocks (volume, battery, date and time) |
-| `.xinitrc`, `.autostart.sh`, `.bash_profile`, `.bashrc` | `~` | startup files and the shell prompt |
+| `.xinitrc`, `.autostart.sh`, `.bash_profile`, `.bashrc`, `.Xresources` | `~` | startup files, the shell prompt, keyboard layout (`KBD_LAYOUT` in `.xinitrc`) and text size (`Xft.dpi` in `.Xresources`) |
 | `rofi/`, `dunst/`, `picom/` | `~/.config/` | launcher, notifications, compositor |
 | `xfce4-terminal/xfce4-terminal.xml` | `~/.config/xfce4/xfconf/xfce-perchannel-xml/` | terminal colours (Gruvbox Dark Hard) and font |
 | `wallpapers/` | `~/Pictures/wallpapers` | wallpapers |

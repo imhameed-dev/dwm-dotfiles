@@ -25,7 +25,7 @@ Usage: ./install.sh [--dry-run] [--yes] [--check] [--firewall] [--dotfiles] [-h|
   --firewall  also install and turn on the ufw firewall (incoming connections
               blocked; SSH is allowed first if an SSH server is installed).
               Without this option the firewall is not touched.
-  --dotfiles  replace your own ~/.bashrc, ~/.bash_profile and ~/.xinitrc with the
+  --dotfiles  replace your own ~/.bashrc, ~/.bash_profile, ~/.xinitrc and ~/.Xresources with the
               ones from this repo (the old files are backed up first).
               Without this option files you already have and changed are kept.
 
@@ -72,7 +72,7 @@ add_tree() {
 # personal DEST: true for the three files people usually edit by hand.
 personal() {
     case $1 in
-        "$HOME/.bashrc"|"$HOME/.bash_profile"|"$HOME/.xinitrc") return 0 ;;
+        "$HOME/.bashrc"|"$HOME/.bash_profile"|"$HOME/.xinitrc"|"$HOME/.Xresources") return 0 ;;
     esac
     return 1
 }
@@ -90,6 +90,7 @@ collect() {
     PAIRS+=("$SRC/scripts/lock-screen.sh" "$HOME/.local/bin/lock-screen")
     PAIRS+=("$SRC/scripts/screenshot.sh" "$HOME/.local/bin/screenshot")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
+    PAIRS+=("$SRC/.Xresources" "$HOME/.Xresources")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")
     PAIRS+=("$SRC/.bashrc" "$HOME/.bashrc")
     PAIRS+=("$SRC/xfce4-terminal/xfce4-terminal.xml" "$CONF/xfce4/xfconf/xfce-perchannel-xml/xfce4-terminal.xml")
@@ -140,7 +141,7 @@ verify() {
     fi
     check "home folders were not created (Documents)" test -d "$HOME/Documents"
     for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
-             brightnessctl i3lock xss-lock xset xrandr scrot pavucontrol playerctl notify-send thunar; do
+             brightnessctl i3lock xss-lock xset xrandr setxkbmap xrdb scrot pavucontrol playerctl notify-send thunar; do
         check "command not found: $c" command -v "$c"
     done
     check "ImageMagick (magick or convert) not found" have_imagemagick
@@ -174,7 +175,7 @@ install_packages() {
             log "Arch: updating the package database and the system, then installing"
             run sudo pacman "${pm[@]}" -- "${common[@]}" \
                 base-devel pkgconf libx11 libxft libxinerama \
-                xorg-server xorg-xinit libinput xorg-xset xorg-xrandr \
+                xorg-server xorg-xinit libinput xorg-xset xorg-xrandr xorg-xrdb xorg-setxkbmap \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
                 networkmanager network-manager-applet libnotify xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono
             ;;

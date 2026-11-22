@@ -1,0 +1,4 @@
+! Read at login by ~/.xinitrc.
+! Xft.dpi sets how big text is in programs: a higher number makes text and icons bigger.
+! 96 is the normal value. Try 110 or 120 if text is too small, then log out and in.
+Xft.dpi: 96

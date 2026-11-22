@@ -9,7 +9,7 @@ A tiny, fast Linux desktop for old computers. You do not need an AI to use it. I
 3. Install Brave Origin yourself (see below).
 4. Log in on the text screen. The desktop starts by itself, or type `startx`. If you use a graphical login screen, choose `dwm` in its session list. If dwm was already running, type `pkill -x dwm` first.
 
-Use your normal user, not root. The installer asks for your password once. Your own `.bashrc`, `.bash_profile` and `.xinitrc` are kept if you already have them and changed them (add `--dotfiles` to replace them with the repo versions). Any other file that is replaced is saved first in `~/.local/state/dwm-dotfiles/backups/`.
+Use your normal user, not root. The installer asks for your password once. Your own `.bashrc`, `.bash_profile`, `.xinitrc` and `.Xresources` are kept if you already have them and changed them (add `--dotfiles` to replace them with the repo versions). Any other file that is replaced is saved first in `~/.local/state/dwm-dotfiles/backups/`.
 
 ## Keys (Super is the Windows key)
 
@@ -43,6 +43,10 @@ The screen locks after 10 minutes without keys or mouse, and before the laptop s
 Optional clock on the lock screen: the package `i3lock-color` adds the weekday, a big day number and the time. On Arch it is in the AUR, so install it by hand (it replaces `i3lock`, and `./install.sh` then leaves `i3lock` alone): `git clone https://aur.archlinux.org/i3lock-color.git && cd i3lock-color`, read the `PKGBUILD`, then `makepkg -si`. Without it the lock screen shows only the picture.
 
 Closing the lid: on laptops where it works, the system suspends and the screen locks. With an external monitor connected, the system ignores the lid on purpose. On the tested laptop the lid switch did not report anything, so the lid does not lock the screen there. The power menu (Super+Shift+S, Lock) always works.
+
+## Keyboard layout and text size
+
+The keyboard layout is one word at the top of `~/.xinitrc`: change `KBD_LAYOUT=us` (for example to `gb`, `de` or `in`), then log out and in. To try a layout at once, run `setxkbmap de`. The size of text and icons is one number in `~/.Xresources`: change `Xft.dpi: 96` (try 110 or 120 if text is too small), then log out and in. After editing, `./install.sh` keeps your changed files unless you use `--dotfiles`.
 
 ## USB drives
 
