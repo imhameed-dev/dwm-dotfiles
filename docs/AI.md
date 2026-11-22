@@ -74,6 +74,7 @@ Boot path: log in on tty1, `.bash_profile` runs `startx`, `.xinitrc` starts dwm,
 | `dwm/` | `/usr/local/bin/dwm` | dwm 6.5 plus local changes; `dwm/config.h` is the only configuration |
 | `dwmblocks/` | `/usr/local/bin/dwmblocks` | status bar blocks (volume, battery, date and time) |
 | `scripts/battery-alert.sh` | `~/.local/bin/battery-alert` | run once a minute by the bar: prints the battery text, shows a notice at 15% and 5%; no background program |
+| `scripts/volume-status.sh` | `~/.local/bin/volume-status` | run by the bar when a volume key is pressed: prints a volume icon and the percent (text "Vol 65%" if the symbols font is missing) |
 | `scripts/monitors.sh` | `~/.local/bin/monitors` | Super+Shift+M: turns on all connected screens side by side (laptop first), turns off unplugged ones; no background program |
 | `.xinitrc`, `.autostart.sh`, `.bash_profile`, `.bashrc`, `.Xresources` | `~` | startup files, the shell prompt, keyboard layout (`KBD_LAYOUT` in `.xinitrc`) and text size (`Xft.dpi` in `.Xresources`) |
 | `rofi/`, `dunst/`, `picom/` | `~/.config/` | launcher, notifications, compositor |

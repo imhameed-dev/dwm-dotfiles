@@ -100,6 +100,7 @@ collect() {
     PAIRS+=("$SRC/scripts/screenshot.sh" "$HOME/.local/bin/screenshot")
     PAIRS+=("$SRC/scripts/monitors.sh" "$HOME/.local/bin/monitors")
     PAIRS+=("$SRC/scripts/battery-alert.sh" "$HOME/.local/bin/battery-alert")
+    PAIRS+=("$SRC/scripts/volume-status.sh" "$HOME/.local/bin/volume-status")
     PAIRS+=("$SRC/.xinitrc" "$HOME/.xinitrc")
     PAIRS+=("$SRC/.Xresources" "$HOME/.Xresources")
     PAIRS+=("$SRC/.bash_profile" "$HOME/.bash_profile")

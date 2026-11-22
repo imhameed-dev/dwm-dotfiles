@@ -46,7 +46,7 @@ Closing the lid: on laptops where it works, the system suspends and the screen l
 
 ## Battery
 
-The bar shows the battery as `Bat 85%` (with a `+` while charging) and nothing on a PC. A notice appears once at 15% and once at 5% while the battery drains. For power saving, run `./install.sh --power`: it installs and turns on `tlp` (if you use `power-profiles-daemon`, remove it first). Without `--power` no power settings are touched.
+The bar shows the battery as an icon and `85%` (a bolt icon while charging) and nothing on a PC. The volume is an icon and the percent. The icons come from the symbols font; without it the bar shows the words `Bat 85%` and `Vol 65%` instead. A notice appears once at 15% and once at 5% while the battery drains. For power saving, run `./install.sh --power`: it installs and turns on `tlp` (if you use `power-profiles-daemon`, remove it first). Without `--power` no power settings are touched.
 
 ## Second monitor
 

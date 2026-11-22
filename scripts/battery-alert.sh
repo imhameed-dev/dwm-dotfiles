@@ -1,6 +1,7 @@
 #!/bin/sh
 # Battery text for the bar, plus a notice at 15% and at 5% while the battery drains.
-# Prints "Bat 85%" ("Bat 85%+" while charging), and nothing at all on a PC without a battery.
+# Prints a battery icon and "85%" (a bolt icon while charging). Without the Nerd symbols font it prints
+# "Bat 85%" ("Bat 85%+" while charging). Prints nothing at all on a PC without a battery.
 # The last notice is remembered in a tiny file, so each one is shown once per drop. It is
 # forgotten when the charger is plugged in or the level goes back above 15%.
 # The bar (dwmblocks) runs this once a minute. Nothing runs in between.
@@ -19,9 +20,28 @@ for b in "$dir"/BAT*; do
 done
 case $cap in '' | *[!0-9]*) exit 0 ;; esac
 
-mark=""
-[ "$status" = "Charging" ] && mark="+"
-printf 'Bat %s%%%s' "$cap" "$mark"
+icons=0
+fc-list : family 2>/dev/null | grep -qi 'symbols nerd' && icons=1
+if [ "$icons" -eq 1 ]; then
+    if [ "$status" = "Charging" ]; then
+        icon='\357\203\247'
+    elif [ "$cap" -ge 88 ]; then
+        icon='\357\211\200'
+    elif [ "$cap" -ge 63 ]; then
+        icon='\357\211\201'
+    elif [ "$cap" -ge 38 ]; then
+        icon='\357\211\202'
+    elif [ "$cap" -ge 13 ]; then
+        icon='\357\211\203'
+    else
+        icon='\357\211\204'
+    fi
+    printf "$icon %s%%" "$cap"
+else
+    mark=""
+    [ "$status" = "Charging" ] && mark="+"
+    printf 'Bat %s%%%s' "$cap" "$mark"
+fi
 
 level=0
 if [ "$status" = "Discharging" ]; then
