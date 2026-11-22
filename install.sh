@@ -148,6 +148,11 @@ verify() {
             printf '  WARN: your own %s is different from the repo (kept; --dotfiles replaces it)\n' "$dest"
             continue
         fi
+        if [[ $dest == "$HOME/Pictures/wallpapers/"* ]]; then
+            # pictures are yours to add, change or delete: only a note
+            optional "wallpaper missing or changed (fine if you chose it): $dest" cmp -s "$src" "$dest"
+            continue
+        fi
         check "missing or different from the repo: $dest" cmp -s "$src" "$dest"
         if [[ $src == *.sh ]]; then
             check "not executable: $dest" test -x "$dest"
