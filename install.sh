@@ -17,6 +17,7 @@ DOTFILES=0
 PASS=0
 FAIL=0
 WARN=0
+NM=1          # 1 = install and turn on NetworkManager, 0 = another network manager is in use
 PAIRS=()   # alternating: file in this repo, place it is installed to
 REMOVED=()  # files taken away by --uninstall
 
@@ -173,11 +174,12 @@ verify() {
         check "tlp is not running" systemctl is-active --quiet tlp
     fi
     check "home folders were not created (Documents)" test -d "$HOME/Documents"
-    for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh nm-applet pactl \
+    for c in dwm dwmblocks startx rofi xfce4-terminal dunst picom feh pactl \
              xset xrandr setxkbmap xrdb notify-send; do
         check "command not found: $c" command -v "$c"
     done
     # Helpers for single features: a miss only turns that feature off.
+    optional "nm-applet not found (no Wi-Fi tray icon)" command -v nm-applet
     optional "brightnessctl not found (brightness keys do nothing)" command -v brightnessctl
     optional "i3lock not found (no screen lock)" command -v i3lock
     optional "xss-lock not found (no automatic lock)" command -v xss-lock
@@ -192,7 +194,36 @@ verify() {
     ((FAIL == 0))
 }
 
+# other_network: print the name of another network manager that is in charge of this
+# computer's network, or print nothing. NET_ROOT is only used by the tests.
+other_network() {
+    local r=${NET_ROOT:-} s f
+    if systemctl is-active --quiet NetworkManager 2>/dev/null; then
+        return 0
+    fi
+    for s in systemd-networkd connman dhcpcd iwd; do
+        if systemctl is-active --quiet "$s" 2>/dev/null; then
+            printf '%s' "$s"
+            return 0
+        fi
+    done
+    for f in "$r"/etc/netplan/*.yaml; do
+        if [[ -e $f ]] && ! grep -qi 'renderer: *NetworkManager' "$f"; then
+            printf 'netplan'
+            return 0
+        fi
+    done
+    if [[ -r $r/etc/network/interfaces ]] &&
+        grep -Eq '^[[:space:]]*(iface|allow-hotplug|auto)[[:space:]]+[^[:space:]]+' <(grep -Ev '^[[:space:]]*(iface|allow-hotplug|auto)[[:space:]]+lo([[:space:]]|$)' "$r/etc/network/interfaces"); then
+        printf 'ifupdown'
+        return 0
+    fi
+    return 0
+}
+
 install_packages() {
+    local -a net=()
+    ((NM)) && net=(networkmanager network-manager-applet)
     local -a common=(rofi dunst feh imagemagick thunar brightnessctl i3lock xss-lock scrot pavucontrol playerctl xfce4-terminal picom xdg-user-dirs gvfs)
     if ((FIREWALL)); then
         common+=(ufw)
@@ -221,19 +252,23 @@ install_packages() {
                 base-devel pkgconf libx11 libxft libxinerama \
                 xorg-server xorg-xinit libinput xorg-xset xorg-xrandr xorg-xrdb xorg-setxkbmap \
                 pipewire pipewire-audio pipewire-pulse wireplumber \
-                networkmanager network-manager-applet libnotify xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono
+                "${net[@]}" libnotify xdg-utils xdg-desktop-portal xdg-desktop-portal-gtk ttf-jetbrains-mono ttf-nerd-fonts-symbols-mono
             ;;
         debian)
             # The core packages are needed to build and start dwm, so a failure stops here.
             # The rest are tried together first, then one by one, so that one package
             # missing on an older release does not stop the others.
             local -a core=(build-essential pkg-config libx11-dev libxft-dev libxinerama-dev
-                           xorg xinit x11-xserver-utils xserver-xorg-input-libinput network-manager
+                           xorg xinit x11-xserver-utils xserver-xorg-input-libinput
                            xdg-user-dirs libnotify-bin)
             local -a optional=() skipped=()
             local p nerd_note=0
+            if ((NM)); then
+                core+=(network-manager)
+                optional+=(network-manager-gnome)
+            fi
             for p in "${common[@]}" pipewire pipewire-audio pipewire-pulse wireplumber \
-                     pulseaudio-utils network-manager-gnome fonts-jetbrains-mono; do
+                     pulseaudio-utils fonts-jetbrains-mono; do
                 [[ $p == xdg-user-dirs ]] || optional+=("$p")
             done
             run sudo apt-get update
@@ -378,8 +413,15 @@ main() {
         [[ $answer =~ ^[Yy] ]] || exit 1
     fi
 
+    other=$(other_network)
+    if [[ -n $other ]]; then
+        NM=0
+        log "Network: this computer already uses $other. NetworkManager is NOT installed or turned on, so your network stays as it is. The Wi-Fi tray icon is not available."
+    fi
     install_packages
-    run sudo systemctl enable --now NetworkManager || log "could not enable NetworkManager; enable it yourself"
+    if ((NM)) && ! systemctl is-active --quiet NetworkManager 2>/dev/null; then
+        run sudo systemctl enable --now NetworkManager || log "could not enable NetworkManager; enable it yourself"
+    fi
 
     log "Creating the standard home folders"
     run xdg-user-dirs-update
